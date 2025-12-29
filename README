@@ -11,24 +11,25 @@ here later.
 Files:
 - Running ROMS
   - Unique Aggregated Run
-    - build script:
-    - Header file: /Model_setup/beaufort_rivers_ak_002.h
-    - ocean.in: /Model_setup/ocean_beaufort_ak_002.in
-    - sediment.in:
-    - run script: 
+    - build script: /Model_setup/Unique_aggregated/coawst.bash
+    - Header file: /Model_setup/Unique_aggregated/beaufort_rivers_ak_002.h
+    - ocean.in: /Model_setup/Unique_aggregated/ocean_beaufort_ak_002.in
+    - sediment.in: /Model_setup/Unique_aggregated/sediment_beaufort_ak_002_10rivs.in
+    - run script: /Model_setup/Unique_aggregated/run_alpine
   - Unique Unaggregated Run
-    - build script:
-    - ocean.in: 
-    - sediment.in:
-    - run script: 
+    - build script: /Model_setup/Unique_unaggregated/coawst.bash
+    - header file: /Model_setup/Unique_unaggregated/beaufort_rivers_ak_003.h
+    - ocean.in: /Model_setup/Unique_unaggregated/ocean_beaufort_ak_003.in
+    - sediment.in: /Model_setup/Unique_unaggregated/sediment_beaufort_ak_003_10rivs.in
+    - run script: /Model_setup/Unique_unaggregated/run_alpine
   - Double Discharge Run
-    - ocean.in: 
-    - sediment.in:
-    - run script: 
+    - ocean.in: /Model_setup/Double_dis/ocean_beaufort_ak_002_double_dis.in
+    - sediment.in: /Model_setup/Double_dis/sediment_beaufort_ak_002_10rivs_riv_sensitivity.in
+    - run script: /Model_setup/Double_dis/run_alpine_double
+  - Variable info: varinfo.dat
 
-
-  - makefile:
-  - run script ()
+  - makefile
   - compiler file (if edited)
+
 - Analysis 
   -
