@@ -10,10 +10,25 @@ here later.
 
 Files:
 - Running ROMS
-  - Header file:
-  - ocean.in:
+  - Unique Aggregated Run
+    - build script:
+    - Header file: /Model_setup/beaufort_rivers_ak_002.h
+    - ocean.in: /Model_setup/ocean_beaufort_ak_002.in
+    - sediment.in:
+    - run script: 
+  - Unique Unaggregated Run
+    - build script:
+    - ocean.in: 
+    - sediment.in:
+    - run script: 
+  - Double Discharge Run
+    - ocean.in: 
+    - sediment.in:
+    - run script: 
+
+
   - makefile:
-  - build_roms.sh
+  - run script ()
   - compiler file (if edited)
 - Analysis 
   -
