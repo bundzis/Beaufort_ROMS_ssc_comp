@@ -1,0 +1,16 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=25
+#SBATCH --time=14:00:00
+#SBATCH --qos=mem
+#SBATCH --partition=amem
+#SBATCH --mem=400G
+#SBATCH --job-name=time_series_spatial_avg_ssc_waves_curs_bstr_by_section
+#SBATCH --output=time_series_spatial_avg_ssc_waves_curs_bstr_by_section_003.out
+#SBATCH --account=ucb543_asc2
+
+module purge
+module load anaconda
+conda activate xroms
+
+python3 plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section.py
