@@ -1,0 +1,36 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=48
+#SBATCH --time=4-00:00:00
+#SBATCH --partition=amilan
+#SBATCH --job-name=ROMS_run_beaufort_unaggregated
+#SBATCH --qos=long
+#SBATCH --output=beaufort_rivers_10rivs_13seabed_unaggregated_rst2_dbsed0001.%j.out
+#SBATCH --account=ucb543_asc1
+##SBATCH --constraint=ib
+
+#sinteractive
+
+pwd
+echo "Initial Module List"
+module list
+module purge
+module load intel/2022.1.2
+module load impi
+module load netcdf
+echo "Final Module List"
+module list
+
+echo "NETCDF PATH"
+which nc-config
+
+echo "MPI Path"
+which mpirun
+
+echo "Run ROMS"
+echo "Need to test syntax"
+export I_MPI_FABRICS=shm
+mpirun -np $SLURM_NTASKS ./coawstM /projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_003/Beaufort_AK_003/ocean_beaufort_ak_003.in 
+
+echo "==End of Job=="
+EOF
