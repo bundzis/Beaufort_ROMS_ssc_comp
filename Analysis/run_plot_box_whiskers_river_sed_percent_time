@@ -1,0 +1,15 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=20
+#SBATCH --time=16:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=amilan
+#SBATCH --job-name=river_sed_percent_regions_time
+#SBATCH --output=river_sed_percent_regions_time_003.out
+#SBATCH --account=ucb543_asc2
+
+module purge
+module load anaconda
+conda activate xesmf_env
+
+python3 plot_box_whiskers_river_sed_percent_time.py
