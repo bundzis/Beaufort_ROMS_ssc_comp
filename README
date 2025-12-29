@@ -34,17 +34,36 @@ Files:
 
 - Analysis 
   - Connectiviy matrices: /Analysis/connectivity_matrix.ipynb 
+    - Figure 7
   - Initial conditions (unique unaggregated run): initial_conds_beaufort_shelf_rivs_003_2020_Blaskey.ipynb
   - Calculate percentage of different sediment classes in SSC over time: percent_ssc_diff_sed_classes.py, percent_ssc_diff_sed_classes.ipynb, run_percent_ssc_diff_sed_classes
+    - Post-processed data: timeseries_ssc_by_class_agg_run.nc, timeseries_ssc_by_class_unag_run.nc
   - Box & whisker plots of percent of SSC that is locally resuspended: plot_box_whiskers_local_resuspend_over_time.py, plot_box_whiskers_local_resuspend_over_time.ipynb, run_plot_box_whiskers_local_resuspend_over_time
+    - Figure 6
+    - Post-processed data: percent_local_resuspended_over_time_aggregated.nc, percent_local_resuspended_over_time_unaggregated.nc
   - Box & whisker plots of percent riverine sed in diff depths: plot_box_whiskers_river_sed_percent_time.py, plot_box_whiskers_river_sed_percent_time.ipynb, run_plot_box_whiskers_river_sed_percent_time, plot_box_whiskers_river_sed_percent_time_sensitivity_test.py, plot_box_whiskers_river_sed_percent_time_sensitivity_test.ipynb, run_plot_box_whiskers_river_sed_percent_time_sensitivity_test
+    - Figure 10, 11 (old)
+    - Post-processed data: percent_river_suspended_sed_over_time_in_regions_aggregated.nc, percent_river_suspended_sed_over_time_in_regions_unaggregated.nc
   - Grid figure: plot_grid_figure_paper2.ipynb
+    - Figure 1, 3 (maybe)
   - Model forcing timeseries: plot_model_forcing_time_series_2020_paper2.py
+    - Figure 2
   - Percent SSC riv vs. seabed: plot_percent_ssc_rivs_seabed.py, plot_percent_ssc_rivs_seabed.ipynb, run_plot_percent_ssc_rivs_seabed
+    - Figure 11 (new)
+    - Post-processed data: timeseries_ssc_seabed_river_std_runs.nc, timeseries_ssc_seabed_river_doub_dis_run.nc
   - Percent time SSC above thresholds: plot_percent_time_ssc_above_value.py, plot_percent_time_ssc_above_value.ipynb, run_plot_percent_time_ssc_above_value
+    - Figure 4
+    - Post-processed data: time_ssc_top_1m_above_three_thresholds_agg.nc, time_ssc_top_1m_above_three_thresholds_unag.nc
   - River kg in regions over time: plot_river_sed_kg_regions_time.py, plot_river_sed_kg_regions_time.ipynb, run_plot_river_sed_kg_regions_time
+    - Post-processed data: kg_suspended_sed_from_rivers_in_depth_regions_aggregated_dbsed0001.nc, kg_suspended_sed_from_rivers_in_depth_regions_unaggregated_dbsed0001.nc
   - Stacked barcharts SSC composition over time: plot_ssc_composition_in_sections_barcharts_over_time.py, plot_ssc_composition_in_sections_barcharts_over_time.ipynb, run_plot_ssc_composition_in_sections_barcharts_over_time
+    - Figure 8
+    - Post-processed data: percent_river_suspended_sed_over_time_in_regions_aggregated.nc, depth_int_ssc_summed_from_source_in_sections_aggregated_dbsed0001.nc, depth_int_ssc_summed_from_source_in_sections_unaggregated_dbsed0001.nc
   - Movie/plot surface salinity, stress, and riverine SSC snapshots: plot_surf_salt_stress_movies.ipynb
+    - Figure 9
   - Spatially-averaged waves, bottom cur. mag., SSC by section: plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section.py, plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section.ipynb, run_plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section
+    - Figure 5 (old)
+    - Post-processed data: timeseries_ssc_hwave_curmag_bsrt_by_section_agg.nc, timeseries_ssc_hwave_curmag_bsrt_by_section_unag.nc, timeseries_ssc_hwave_curmag_bsrt_by_section_agg_nosec13.nc, timeseries_ssc_hwave_curmag_bsrt_by_section_unag_nosec13.nc
   - Maps of correlations: plot_correlations_as_maps.ipynb
+    - Figure 5 (new)
   - 
