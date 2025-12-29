@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=20
+#SBATCH --time=10:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=amilan
+#SBATCH --job-name=box_whiskers_local_resuspend_over_time
+#SBATCH --output=box_whiskers_local_resuspend_over_time_001.out
+
+module purge
+module load anaconda
+conda activate xesmf_env
+
+python3 plot_box_whiskers_local_resuspend_over_time.py
