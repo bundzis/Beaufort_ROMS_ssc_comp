@@ -1,0 +1,15 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=25
+#SBATCH --time=06:00:00
+#SBATCH --qos=mem
+#SBATCH --partition=amem
+#SBATCH --mem=400G
+#SBATCH --job-name=percent_ssc_diff_sed_classes
+#SBATCH --output=percent_ssc_diff_sed_classes_001.out
+
+module purge
+module load anaconda
+conda activate xroms
+
+python3 percent_ssc_diff_sed_classes.py
