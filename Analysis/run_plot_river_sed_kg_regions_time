@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=20
+#SBATCH --time=05:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=amilan
+#SBATCH --job-name=river_sed_time
+#SBATCH --output=river_sed_time_005.out
+
+module purge
+module load anaconda
+conda activate xesmf_env
+
+python3 plot_river_sed_kg_regions_time.py
