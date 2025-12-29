@@ -8,6 +8,10 @@ ROMS.
 The associated ROMS input files will be uploaded to a Zenodo and linked 
 here later.
 
+Note: For some analysis scripts, the *.py version is for processing 
+the model output (needed highmem nodes) and the *.ipynb version is 
+for plotting the post-processed data. 
+
 Files:
 - Running ROMS
   - Unique Aggregated Run
@@ -28,8 +32,25 @@ Files:
     - run script: /Model_setup/Double_dis/run_alpine_double
   - Variable info: varinfo.dat
 
-  - makefile
-  - compiler file (if edited)
-
 - Analysis 
-  -
+  - Connectiviy matrices: /Analysis/connectivity_matrix.ipynb 
+  - Initial conditions (unique unaggregated run): initial_conds_beaufort_shelf_rivs_003_2020_Blaskey.ipynb
+  - Calculate percentage of different sediment classes in SSC over time: percent_ssc_diff_sed_classes.py, percent_ssc_diff_sed_classes.ipynb, 
+                                                                          run_percent_ssc_diff_sed_classes
+  - Box & whisker plots of percent of SSC that is locally resuspended: plot_box_whiskers_local_resuspend_over_time.py, plot_box_whiskers_local_resuspend_over_time.ipynb, 
+                                                                        run_plot_box_whiskers_local_resuspend_over_time
+  - Box & whisker plots of percent riverine sed in diff depths: plot_box_whiskers_river_sed_percent_time.py, plot_box_whiskers_river_sed_percent_time.ipynb, 
+                                                                 run_plot_box_whiskers_river_sed_percent_time, plot_box_whiskers_river_sed_percent_time_sensitivity_test.py,
+                                                                  plot_box_whiskers_river_sed_percent_time_sensitivity_test.ipynb, run_plot_box_whiskers_river_sed_percent_time_sensitivity_test
+  - Grid figure: plot_grid_figure_paper2.ipynb
+  - Model forcing timeseries: plot_model_forcing_time_series_2020_paper2.py
+  - Percent SSC riv vs. seabed: plot_percent_ssc_rivs_seabed.py, plot_percent_ssc_rivs_seabed.ipynb, run_plot_percent_ssc_rivs_seabed
+  - Percent time SSC above thresholds: plot_percent_time_ssc_above_value.py, plot_percent_time_ssc_above_value.ipynb, run_plot_percent_time_ssc_above_value
+  - River kg in regions over time: plot_river_sed_kg_regions_time.py, plot_river_sed_kg_regions_time.ipynb, run_plot_river_sed_kg_regions_time
+  - Stacked barcharts SSC composition over time: plot_ssc_composition_in_sections_barcharts_over_time.py, plot_ssc_composition_in_sections_barcharts_over_time.ipynb,
+                                                  run_plot_ssc_composition_in_sections_barcharts_over_time
+  - Movie/plot surface salinity, stress, and riverine SSC snapshots: plot_surf_salt_stress_movies.ipynb
+  - Spatially-averaged waves, bottom cur. mag., SSC by section: plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section.py, plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section.ipynb,
+                                                                 run_plot_time_series_spatial_avg_ssc_waves_curs_bstr_by_section
+  - Maps of correlations: plot_correlations_as_maps.ipynb
+  - 
