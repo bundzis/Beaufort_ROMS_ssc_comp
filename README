@@ -1,20 +1,19 @@
-##################### Beufort_ROMS_ssc_comp ##########################
-# Thie repo is home to the analysis scripts used for the project about 
-# the composition of SSC on the Alaskan Beaufort Sea shelf in terms
-# of riverine sediment, local resuspension, and regional advection.
-# This repo also contains some of the settings/scripts needed to run 
-# ROMS.
+*************************** Beufort_ROMS_ssc_comp ******************************
+Thie repo is home to the analysis scripts used for the project about 
+the composition of SSC on the Alaskan Beaufort Sea shelf in terms
+of riverine sediment, local resuspension, and regional advection.
+This repo also contains some of the settings/scripts needed to run 
+ROMS.
 
 The associated ROMS input files will be uploaded to a Zenodo and linked 
-# here later.
+here later.
 
-# Files:
-# - Running ROMS
-#   - Header file:
-#   - ocean.in:
-#   - makefile:
-#   - build_roms.sh
-#   - compiler file (if edited):
-
-# - Analysis 
-#   -
+Files:
+- Running ROMS
+  - Header file:
+  - ocean.in:
+  - makefile:
+  - build_roms.sh
+  - compiler file (if edited)
+- Analysis 
+  -
