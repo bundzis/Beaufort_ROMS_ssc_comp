@@ -16,6 +16,7 @@ Created on Mon Jul 10 10:02:46 2023
 #   ends up in the final plot will be in the first panel of the plot
 # - This script needs to be run in base env 
 # - This script has been updated to use the 2020 model run  for paper 2
+# - This also works in xesmf_env (local)
 ################################################################################
 
 
@@ -28,6 +29,7 @@ import pandas as pd
 import matplotlib
 from matplotlib import gridspec
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 #from matplotlib import transforms 
 import cmocean
 #import matplotlib.ticker as tick
@@ -1199,6 +1201,468 @@ plt.subplots_adjust(hspace=.08)
 
 
 
+# --------------------------------------------------------------------------------
+# --------------- Plot 8: Masked  Spatially-Averaged Time Series -----------------
+# ---------------------------- with River Details --------------------------------
+# --------------------------------------------------------------------------------
+# Same as above but trimmed to only plot the time that the model actually runs for
+# since the model ends on October 29, hour 4
+
+# Make the figure 
+fig15 = plt.figure(figsize=(32,30)) #(horizontal, vertical) (32,38) (32,30)
+#fig13.suptitle('Masked Model Forcing Time Series', fontsize=40)
+
+# Set height ratios for subplots
+gs3 = gridspec.GridSpec(6, 1, height_ratios=[1,1,1,1,2,2])
+
+# Surface stress
+ax19 = plt.subplot(gs3[0])
+line6, = ax19.plot(time_data_sustr, sustr_avg, color='salmon', label= '$\\bf{Along-Shore}$', linewidth=8) #time_data_wind[:938] for July,
+line61, = ax19.plot(time_data_svstr, svstr_avg, color='dodgerblue', label='$\\bf{Across-Shore}$', linewidth=8)
+ax19.set_ylabel('Surface \nStress \n(N/m\u00b2)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=120, va='center')
+#ax0.axhspan(ax0.get_ylim()[0], 0, facecolor='lemonchiffon', alpha=0.5)
+ax19.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+plt.setp(ax19.get_xticklabels(), visible=True)
+xticks1 = ax19.xaxis.get_major_ticks()
+#ax0.set_xlabel('Time', fontsize=30)
+
+
+# Currents
+ax20 = plt.subplot(gs3[1], sharex= ax19)
+line7, = ax20.plot(time_data_cur[:-31], ubar_avg_masked[:-31]*100, color='orangered', label= '$\\bf{Along-Shore}$', linewidth=8) #time_data_cur[:313] for July 
+line71, = ax20.plot(time_data_cur[:-31], vbar_avg_masked[:-31]*100, color='cornflowerblue', label='$\\bf{Across-Shore}$', linewidth=8)
+ax20.set_ylabel('Larger-Scale \nCurrent \nSpeed \n(cm/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=118, va='center')
+#ax0.axhspan(ax0.get_ylim()[0], 0, facecolor='lemonchiffon', alpha=0.5)
+ax20.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+plt.setp(ax20.get_xticklabels(), visible=False)
+yticks20 = ax20.yaxis.get_major_ticks()
+#ax0.set_xlabel('Time', fontsize=30)
+
+# Waves
+# shared axis X
+ax21 = plt.subplot(gs3[2], sharex = ax19)
+line8, = ax21.plot(time_data_wave[:-117], swh_avg_masked[:-117], color='purple', label='$\\bf{Significant Wave Height}$', linewidth=8) #time_data_wave[:313] for July 
+#ax2.axhspan(ax2.get_ylim()[0], 0, facecolor='lemonchiffon', alpha=0.5)
+#ax2.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+plt.setp(ax21.get_xticklabels(), visible=False)
+ax21.set_ylabel('Significant \nWave \nHeight \n(m)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=130, va='center')
+# remove last tick label for the second subplot
+yticks21 = ax21.yaxis.get_major_ticks()
+#yticks[-1].label1.set_visible(False)
+
+# Sea ice concentration 
+# shared axis X
+ax24 = plt.subplot(gs3[3], sharex = ax19)
+line11, = ax24.plot(time_data_ice[:-4], mean_cover_masked[:-4], color='green', label='$\\bf{Sea Ice Concentration}$', linewidth=8) #time_data_riv[:40] for July 
+plt.setp(ax24.get_xticklabels(), visible=False)
+#ax4.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+ax24.set_ylabel('Sea Ice \nConc. \n(fraction \nof grid cell)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=115, va='center')
+# remove last tick label for the second subplot
+yticks24 = ax24.yaxis.get_major_ticks()
+#yticks[-1].label1.set_visible(False)
+
+# River water discharge - Standard
+# shared axis X
+#ax22a = plt.subplot(gs[4], sharex=ax19)
+ax22 = plt.subplot(gs3[4], sharex = ax19)
+#ax22.set_yscale('log')
+#ax22.set_ylim(0,1000)
+# Standard
+# Total
+ax22.plot(time_data_riv[:-4], water_dis_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
+# Kalikpik
+ax22.plot(time_data_riv[:-4], water_dis_kal_std[:-4], label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
+# Fish Creek
+ax22.plot(time_data_riv[:-4], water_dis_fis_std[:-4], label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
+# Colville
+ax22.plot(time_data_riv[:-4], water_dis_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
+# Kuparik
+ax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+# Sagavanirktok
+ax22.plot(time_data_riv[:-4], water_dis_sag_std[:-4], label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
+# Staines
+ax22.plot(time_data_riv[:-4], water_dis_sta_std[:-4], label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
+# Canning
+ax22.plot(time_data_riv[:-4], water_dis_can_std[:-4], label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
+# Katakturuk
+ax22.plot(time_data_riv[:-4], water_dis_kat_std[:-4], label='$\\bf{Katakturuk}$', linewidth=5, color=river_colors[7])
+# Hulahula
+ax22.plot(time_data_riv[:-4], water_dis_hul_std[:-4], label='$\\bf{Hulahula}$', linewidth=5, color=river_colors[8])
+# Jago
+ax22.plot(time_data_riv[:-4], water_dis_jag_std[:-4], label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
+plt.setp(ax22.get_xticklabels(), visible=False)
+ax22.set_ylabel('Water \nDischarge \n(m\u00b3/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=120, va='center')
+yticks22 = ax22.yaxis.get_major_ticks()
+
+# Water discharge - Double
+#ax22b = plt.subplot(gs3[5], sharex = ax19)
+#ax22b.set_ylim(1000,2000)
+# Total
+ax22.plot(time_data_riv[:-4], water_dis_tot_double[:-4], color='black', linewidth=5, linestyle='--') #time_data_riv[:40] for July 
+# Kalikpik
+ax22.plot(time_data_riv[:-4], water_dis_kal_double[:-4], linewidth=5, color=river_colors[0], linestyle='--')
+# Fish Creek
+ax22.plot(time_data_riv[:-4], water_dis_fis_double[:-4], linewidth=5, color=river_colors[1], linestyle='--')
+# Colville
+ax22.plot(time_data_riv[:-4], water_dis_col_double[:-4], linewidth=5, color=river_colors[2], linestyle='--')
+# Kuparik
+ax22.plot(time_data_riv[:-4], water_dis_kup_double[:-4], linewidth=5, color=river_colors[3], linestyle='--')
+# Sagavanirktok
+ax22.plot(time_data_riv[:-4], water_dis_sag_double[:-4], linewidth=5, color=river_colors[4], linestyle='--')
+# Staines
+ax22.plot(time_data_riv[:-4], water_dis_sta_double[:-4], linewidth=5, color=river_colors[5], linestyle='--')
+# Canning
+ax22.plot(time_data_riv[:-4], water_dis_can_double[:-4], linewidth=5, color=river_colors[6], linestyle='--')
+# Katakturuk
+ax22.plot(time_data_riv[:-4], water_dis_kat_double[:-4], linewidth=5, color=river_colors[7], linestyle='--')
+# Hulahula
+ax22.plot(time_data_riv[:-4], water_dis_hul_double[:-4], linewidth=5, color=river_colors[8], linestyle='--')
+# Jago
+ax22.plot(time_data_riv[:-4], water_dis_jag_double[:-4], linewidth=5, color=river_colors[9], linestyle='--')
+
+# =============================================================================
+# plt.setp(ax22b.get_xticklabels(), visible=False)
+# ax22b.set_ylabel('Water \nDischarge \n(m\u00b3/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=120, va='center')
+# yticks22b = ax22b.yaxis.get_major_ticks()
+# =============================================================================
+
+# River sediment discharge - Standard
+# shared axis X
+ax23 = plt.subplot(gs3[5], sharex = ax19)
+#ax23.set_yscale('log')
+#ax23.set_ylim(0,125)
+# Standard 
+# Total
+ax23.plot(time_data_riv[:-4], water_sed_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
+# Kalikpik
+ax23.plot(time_data_riv[:-4], water_sed_kal_std[:-4], label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
+# Fish Creek
+ax23.plot(time_data_riv[:-4], water_sed_fis_std[:-4], label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
+# Colville
+ax23.plot(time_data_riv[:-4], water_sed_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
+# Kuparik
+ax23.plot(time_data_riv[:-4], water_sed_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+# Sagavanirktok
+ax23.plot(time_data_riv[:-4], water_sed_sag_std[:-4], label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
+# Staines
+ax23.plot(time_data_riv[:-4], water_sed_sta_std[:-4], label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
+# Canning
+ax23.plot(time_data_riv[:-4], water_sed_can_std[:-4], label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
+# Katakturuk
+ax23.plot(time_data_riv[:-4], water_sed_kat_std[:-4], label='$\\bf{Katakturuk}$', linewidth=5, color=river_colors[7])
+# Hulahula
+ax23.plot(time_data_riv[:-4], water_sed_hul_std[:-4], label='$\\bf{Hulahula}$', linewidth=5,  color=river_colors[8])
+# Jago
+ax23.plot(time_data_riv[:-4], water_sed_jag_std[:-4], label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
+plt.setp(ax23.get_xticklabels(), visible=True)
+ax23.set_ylabel('River \nSediment \nLoad \n(kg/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=110, va='center')
+yticks23 = ax23.yaxis.get_major_ticks()
+
+# Double
+#ax23b = plt.subplot(gs3[7], sharex = ax19)
+#ax23b.set_ylim(125, 2000)
+# Total
+ax23.plot(time_data_riv[:-4], water_sed_tot_double[:-4], color='black', linewidth=5, linestyle='--') #time_data_riv[:40] for July 
+# Kalikpik
+ax23.plot(time_data_riv[:-4], water_sed_kal_double[:-4], linewidth=5, color=river_colors[0], linestyle='--')
+# Fish Creek
+ax23.plot(time_data_riv[:-4], water_sed_fis_double[:-4], linewidth=5, color=river_colors[1], linestyle='--')
+# Colville
+ax23.plot(time_data_riv[:-4], water_sed_col_double[:-4], linewidth=5, color=river_colors[2], linestyle='--')
+# Kuparik
+ax23.plot(time_data_riv[:-4], water_sed_kup_double[:-4], linewidth=5, color=river_colors[3], linestyle='--')
+# Sagavanirktok
+ax23.plot(time_data_riv[:-4], water_sed_sag_double[:-4], linewidth=5, color=river_colors[4], linestyle='--')
+# Staines
+ax23.plot(time_data_riv[:-4], water_sed_sta_double[:-4], linewidth=5, color=river_colors[5], linestyle='--')
+# Canning
+ax23.plot(time_data_riv[:-4], water_sed_can_double[:-4], linewidth=5, color=river_colors[6], linestyle='--')
+# Katakturuk
+ax23.plot(time_data_riv[:-4], water_sed_kat_double[:-4], linewidth=5, color=river_colors[7], linestyle='--')
+# Hulahula
+ax23.plot(time_data_riv[:-4], water_sed_hul_double[:-4], linewidth=5, color=river_colors[8], linestyle='--')
+# Jago
+ax23.plot(time_data_riv[:-4], water_sed_jag_double[:-4], linewidth=5, color=river_colors[9], linestyle='--')
+
+# =============================================================================
+# plt.setp(ax23b.get_xticklabels(), visible=True)
+# ax23b.set_ylabel('River \nSediment \nLoad \n(kg/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=110, va='center')
+# yticks23b = ax23b.yaxis.get_major_ticks()
+# =============================================================================
+
+
+
+# put legend on first subplot
+#ax0.legend((line0, line1), ('red line', 'blue line'))
+ax19.legend(fontsize=35, loc='lower left', labelspacing=0.05, ncol=2, columnspacing=0.92)
+ax20.legend(fontsize=35, loc='lower left', labelspacing=0.05, ncol=2, columnspacing=0.92)
+ax23.legend(fontsize=35, labelspacing=0.05, ncol=3, columnspacing=0.92)
+plt.xlabel('\nDate', fontsize=40, fontweight='bold')
+
+# Add text labels for the panels (a, b, c, etc.)
+# Use these if there are 6 subplots
+plt.text(0.135, 0.849, 'a)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.135, 0.727, 'b)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.135, 0.595, 'c)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.135, 0.47, 'd)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.135, 0.345, 'e)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.135, 0.22, 'f)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+# Use these if there are 7 subplots
+#plt.text(0.135, 0.855, 'a)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.742, 'b)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.638, 'c)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.528, 'd)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.420, 'e)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.310, 'f)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+#plt.text(0.135, 0.203, 'g)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+
+
+#fig1.set_tight_layout()
+
+plt.tight_layout
+
+
+# remove vertical gap between subplots
+#plt.setp(ax0.get_xticklabels(), visible=False)
+plt.subplots_adjust(hspace=.08)
+#plt.show()
+
+
+
+
+
+# --------------------------------------------------------------------------------
+# --------------- Plot 9: Masked  Spatially-Averaged Time Series -----------------
+# ---------------------------- with River Details --------------------------------
+# ------------------------ with help from chatGPT --------------------------------
+# --------------------------------------------------------------------------------
+# ChatGPT version 
+from brokenaxes import brokenaxes
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+
+# Make the figure 
+fig15 = plt.figure(figsize=(32,30), dpi=200)  # (horizontal, vertical) (32, 30)
+gs3 = gridspec.GridSpec(6, 1, height_ratios=[1,1,1,1,2,2])
+
+# ----------------------
+# Surface stress
+# ----------------------
+ax19 = plt.subplot(gs3[0])
+line6, = ax19.plot(time_data_sustr, sustr_avg, color='salmon', label='$\\bf{Along-Shore}$', linewidth=8)
+line61, = ax19.plot(time_data_svstr, svstr_avg, color='dodgerblue', label='$\\bf{Across-Shore}$', linewidth=8)
+ax19.set_ylabel('Surface \nStress \n(N/m\u00b2)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=120, va='center')
+ax19.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+plt.setp(ax19.get_xticklabels(), visible=False)
+ax19.legend(fontsize=35, loc='lower left', labelspacing=0.05, ncol=2, columnspacing=0.92)
+
+# ----------------------
+# Currents
+# ----------------------
+ax20 = plt.subplot(gs3[1], sharex=ax19)
+ax20.plot(time_data_cur[:-31], ubar_avg_masked[:-31]*100, color='orangered', label='$\\bf{Along-Shore}$', linewidth=8)
+ax20.plot(time_data_cur[:-31], vbar_avg_masked[:-31]*100, color='cornflowerblue', label='$\\bf{Across-Shore}$', linewidth=8)
+ax20.set_ylabel('Larger-Scale \nCurrent \nSpeed \n(cm/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=148, va='center')
+ax20.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
+plt.setp(ax20.get_xticklabels(), visible=False)
+ax20.legend(fontsize=35, loc='lower left', labelspacing=0.05, ncol=2, columnspacing=0.92)
+
+# ----------------------
+# Waves
+# ----------------------
+ax21 = plt.subplot(gs3[2], sharex=ax19)
+ax21.plot(time_data_wave[:-117], swh_avg_masked[:-117], color='purple', label='$\\bf{Significant Wave Height}$', linewidth=8)
+ax21.set_ylabel('Significant \nWave \nHeight \n(m)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=170, va='center')
+plt.setp(ax21.get_xticklabels(), visible=False)
+
+# ----------------------
+# Sea ice concentration 
+# ----------------------
+ax24 = plt.subplot(gs3[3], sharex=ax19)
+ax24.plot(time_data_ice[:-4], mean_cover_masked[:-4], color='green', label='$\\bf{Sea Ice Concentration}$', linewidth=8)
+ax24.set_ylabel('Sea Ice \nConc. \n(fraction \nof grid cell)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=140, va='center')
+plt.setp(ax24.get_xticklabels(), visible=False)
+
+# ----------------------
+# Water discharge (Broken Axis)
+# ----------------------
+bax22 = brokenaxes(
+    ylims=[(0, 800), (800, 6000)],   # adjust for your data
+    hspace=0.05,
+    height_ratios=[1,2],
+    subplot_spec=gs3[4],
+    fig=fig15
+)
+
+# Standard
+bax22.plot(time_data_riv[:-4], water_dis_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5)
+bax22.plot(time_data_riv[:-4], water_dis_kal_std[:-4], label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
+bax22.plot(time_data_riv[:-4], water_dis_fis_std[:-4], label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
+bax22.plot(time_data_riv[:-4], water_dis_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
+bax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+bax22.plot(time_data_riv[:-4], water_dis_sag_std[:-4], label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
+bax22.plot(time_data_riv[:-4], water_dis_sta_std[:-4], label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
+bax22.plot(time_data_riv[:-4], water_dis_can_std[:-4], label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
+bax22.plot(time_data_riv[:-4], water_dis_kat_std[:-4], label='$\\bf{Katakturuk}$', linewidth=5, color=river_colors[7])
+bax22.plot(time_data_riv[:-4], water_dis_hul_std[:-4], label='$\\bf{Hulahula}$', linewidth=5, color=river_colors[8])
+bax22.plot(time_data_riv[:-4], water_dis_jag_std[:-4], label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
+
+# Double
+bax22.plot(time_data_riv[:-4], water_dis_tot_double[:-4], color='black', linewidth=5, linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_kal_double[:-4], linewidth=5, color=river_colors[0], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_fis_double[:-4], linewidth=5, color=river_colors[1], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_col_double[:-4], linewidth=5, color=river_colors[2], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_kup_double[:-4], linewidth=5, color=river_colors[3], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_sag_double[:-4], linewidth=5, color=river_colors[4], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_sta_double[:-4], linewidth=5, color=river_colors[5], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_can_double[:-4], linewidth=5, color=river_colors[6], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_kat_double[:-4], linewidth=5, color=river_colors[7], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_hul_double[:-4], linewidth=5, color=river_colors[8], linestyle='--')
+bax22.plot(time_data_riv[:-4], water_dis_jag_double[:-4], linewidth=5, color=river_colors[9], linestyle='--')
+
+bax22.set_ylabel('Water \nDischarge \n(m\u00b3/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=220, va='center')
+plt.setp(bax22.get_xticklabels(), visible=False)
+bax22.axs[0].tick_params(axis='y', which='both', labelleft=True)
+bax22.axs[1].tick_params(axis='y', which='both', labelleft=True)
+bax22.axs[0].spines['top'].set_visible(True)
+bax22.axs[0].spines['right'].set_visible(True)
+bax22.axs[1].spines['right'].set_visible(True)
+fig15.text(0.092, 0.411, '800', color='black', fontsize=30)
+fig15.text(0.092, 0.393, '800', color='black', fontsize=30)
+
+# ----------------------
+# River sediment discharge (Broken Axis)
+# ----------------------
+bax23 = brokenaxes(
+    ylims=[(0, 200), (200, 4500)],     # adjust for your data
+    hspace=0.05,
+    height_ratios=[1,2],
+    subplot_spec=gs3[5],
+    fig=fig15
+)
+#bax23 = plt.subplot(gs3[5], sharex=ax19)
+
+# Sediment load
+# =============================================================================
+# # Standard
+# bax23.plot(time_data_riv[:-4], water_sed_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5)
+# bax23.plot(time_data_riv[:-4], water_sed_kal_std[:-4], label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
+# bax23.plot(time_data_riv[:-4], water_sed_fis_std[:-4], label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
+# bax23.plot(time_data_riv[:-4], water_sed_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
+# bax23.plot(time_data_riv[:-4], water_sed_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+# bax23.plot(time_data_riv[:-4], water_sed_sag_std[:-4], label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
+# bax23.plot(time_data_riv[:-4], water_sed_sta_std[:-4], label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
+# bax23.plot(time_data_riv[:-4], water_sed_can_std[:-4], label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
+# bax23.plot(time_data_riv[:-4], water_sed_kat_std[:-4], label='$\\bf{Katakturuk}$', linewidth=5, color=river_colors[7])
+# bax23.plot(time_data_riv[:-4], water_sed_hul_std[:-4], label='$\\bf{Hulahula}$', linewidth=5, color=river_colors[8])
+# bax23.plot(time_data_riv[:-4], water_sed_jag_std[:-4], label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
+# 
+# # Double
+# bax23.plot(time_data_riv[:-4], water_sed_tot_double[:-4], color='black', linewidth=5, linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_kal_double[:-4], linewidth=5, color=river_colors[0], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_fis_double[:-4], linewidth=5, color=river_colors[1], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_col_double[:-4], linewidth=5, color=river_colors[2], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_kup_double[:-4], linewidth=5, color=river_colors[3], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_sag_double[:-4], linewidth=5, color=river_colors[4], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_sta_double[:-4], linewidth=5, color=river_colors[5], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_can_double[:-4], linewidth=5, color=river_colors[6], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_kat_double[:-4], linewidth=5, color=river_colors[7], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_hul_double[:-4], linewidth=5, color=river_colors[8], linestyle='--')
+# bax23.plot(time_data_riv[:-4], water_sed_jag_double[:-4], linewidth=5, color=river_colors[9], linestyle='--')
+# 
+# =============================================================================
+# River SSC
+# Standard
+bax23.plot(time_data_riv[:-4], water_ssc_tot_std[:-4]*1000, color='black', label='$\\bf{Total}$', linewidth=5)
+bax23.plot(time_data_riv[:-4], water_ssc_kal_std[:-4]*1000, label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
+bax23.plot(time_data_riv[:-4], water_ssc_fis_std[:-4]*1000, label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
+bax23.plot(time_data_riv[:-4], water_ssc_col_std[:-4]*1000, label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
+bax23.plot(time_data_riv[:-4], water_ssc_kup_std[:-4]*1000, label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+bax23.plot(time_data_riv[:-4], water_ssc_sag_std[:-4]*1000, label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
+bax23.plot(time_data_riv[:-4], water_ssc_sta_std[:-4]*1000, label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
+bax23.plot(time_data_riv[:-4], water_ssc_can_std[:-4]*1000, label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
+bax23.plot(time_data_riv[:-4], water_ssc_kat_std[:-4]*1000, label='$\\bf{Katakturuk}$', linewidth=5, color=river_colors[7])
+bax23.plot(time_data_riv[:-4], water_ssc_hul_std[:-4]*1000, label='$\\bf{Hulahula}$', linewidth=5, color=river_colors[8])
+bax23.plot(time_data_riv[:-4], water_ssc_jag_std[:-4]*1000, label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
+
+# Double
+bax23.plot(time_data_riv[:-4], water_ssc_tot_double[:-4]*1000, color='black', linewidth=5, linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_kal_double[:-4]*1000, linewidth=5, color=river_colors[0], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_fis_double[:-4]*1000, linewidth=5, color=river_colors[1], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_col_double[:-4]*1000, linewidth=5, color=river_colors[2], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_kup_double[:-4]*1000, linewidth=5, color=river_colors[3], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_sag_double[:-4]*1000, linewidth=5, color=river_colors[4], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_sta_double[:-4]*1000, linewidth=5, color=river_colors[5], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_can_double[:-4]*1000, linewidth=5, color=river_colors[6], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_kat_double[:-4]*1000, linewidth=5, color=river_colors[7], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_hul_double[:-4]*1000, linewidth=5, color=river_colors[8], linestyle='--')
+bax23.plot(time_data_riv[:-4], water_ssc_jag_double[:-4]*1000, linewidth=5, color=river_colors[9], linestyle='--')
+
+
+
+#bax23.set_ylabel('River \nSediment \nLoad \n(kg/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=210, va='center')
+bax23.set_ylabel('River \nSSC \n(mg/L)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=210, va='center')
+bax23.set_xlabel('\nDate', fontsize=40, fontweight='bold')
+bax23.axs[0].tick_params(axis='y', which='both', labelleft=True)
+bax23.axs[1].tick_params(axis='y', which='both', labelleft=True)
+bax23.axs[0].spines['top'].set_visible(True)
+bax23.axs[0].spines['right'].set_visible(True)
+bax23.axs[1].spines['right'].set_visible(True)
+fig15.text(0.092, 0.227, '200', color='black', fontsize=30)
+fig15.text(0.092, 0.209, '200', color='black', fontsize=30)
+
+# Legend for bottom plot
+bax23.legend(fontsize=35, labelspacing=0.05, ncol=3, columnspacing=0.92, bbox_to_anchor=(0.80,-0.25))
+
+# Make legend for dashed vs solid lines 
+solid_line = Line2D([0], [0], color='grey', linestyle='-', linewidth=5)
+dashed_line = Line2D([0], [0], color='grey', linestyle='--', linewidth=5)
+bax22.legend(handles=[solid_line, dashed_line], labels=['Standard', 'Doubled'], loc='upper right',
+             fontsize=35)
+
+
+# Manually add the legend using the custom handles and labels
+
+
+# ----------------------
+# Panel labels (a–f)
+# ----------------------
+plt.text(0.131, 0.856, 'a)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.755, 'b)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.660, 'c)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.565, 'd)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.462, 'e)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.280, 'f)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+
+plt.subplots_adjust(hspace=0.08)
+
+
+
+# --------------------------------------------------------------------------------
+# -------------------------------Statistics  ------------------------------
+# --------------------------------------------------------------------------------
+# Calculate the total amount of sediment delivered to the domain over the run
+# according to these discharge values and rating curve (for standard and double)
+
+# Multiply the sediment load by dt then add it up 
+# dt = daily
+dt = 86400 # seconds = 1 day
+
+# Multiply by dt
+tot_sed_del_std_tmp = water_sed_tot_std * dt
+tot_sed_del_double_tmp = water_sed_tot_double * dt
+
+# Add all times together
+tot_sed_del_std = np.sum(tot_sed_del_std_tmp)
+tot_sed_del_double = np.sum(tot_sed_del_double_tmp)
+
+# Print these values
+print('total sediment delivered standard (kg): ', tot_sed_del_std.values)
+print('total sediment delivered double (kg): ', tot_sed_del_double.values)
+
+
+
+
 
 # --------------------------------------------------------------------------------
 # -------------------------------------- Save Masks ------------------------------
@@ -1212,69 +1676,69 @@ plt.subplots_adjust(hspace=.08)
 #                                      coords={'eta_rho': grid.eta_rho.values, 'xi_rho': grid.xi_rho.values},
 #                                      dims=['eta_rho', 'xi_rho'])
 # =============================================================================
-ds_mask_rho_zeros_ones = xr.DataArray(data=nudge_mask_rho,
-                                     dims=['eta_rho', 'xi_rho'],
-                                     coords=dict(eta_rho=(['eta_rho'], grid.eta_rho.values), 
-                                                 xi_rho=(['xi_rho'], grid.xi_rho.values)),
-                                     name='nudge_mask_rho')
-#ds_mask_rho_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_rho_zeros_ones.nc')
+# ds_mask_rho_zeros_ones = xr.DataArray(data=nudge_mask_rho,
+#                                      dims=['eta_rho', 'xi_rho'],
+#                                      coords=dict(eta_rho=(['eta_rho'], grid.eta_rho.values), 
+#                                                  xi_rho=(['xi_rho'], grid.xi_rho.values)),
+#                                      name='nudge_mask_rho')
+# #ds_mask_rho_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_rho_zeros_ones.nc')
 
-# ones and nans
-ds_mask_rho_ones_nans = xr.DataArray(data=nudge_mask_rho_nan,
-                                     dims=['eta_rho', 'xi_rho'],
-                                     coords=dict(eta_rho=(['eta_rho'], grid.eta_rho.values), 
-                                                 xi_rho=(['xi_rho'], grid.xi_rho.values)),
-                                     name='nudge_mask_rho_nan')
-#ds_mask_rho_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_rho_ones_nans.nc')
+# # ones and nans
+# ds_mask_rho_ones_nans = xr.DataArray(data=nudge_mask_rho_nan,
+#                                      dims=['eta_rho', 'xi_rho'],
+#                                      coords=dict(eta_rho=(['eta_rho'], grid.eta_rho.values), 
+#                                                  xi_rho=(['xi_rho'], grid.xi_rho.values)),
+#                                      name='nudge_mask_rho_nan')
+# #ds_mask_rho_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_rho_ones_nans.nc')
 
-# U masks 
-# zeros and ones
-ds_mask_u_zeros_ones = xr.DataArray(data=nudge_mask_u,
-                                      dims=['eta_u', 'xi_u'],
-                                     coords=dict(eta_u=(['eta_u'], grid.eta_u.values), 
-                                                 xi_u=(['xi_u'], grid.xi_u.values)),
-                                     name='nudge_mask_u')
-#ds_mask_u_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_u_zeros_ones.nc')
+# # U masks 
+# # zeros and ones
+# ds_mask_u_zeros_ones = xr.DataArray(data=nudge_mask_u,
+#                                       dims=['eta_u', 'xi_u'],
+#                                      coords=dict(eta_u=(['eta_u'], grid.eta_u.values), 
+#                                                  xi_u=(['xi_u'], grid.xi_u.values)),
+#                                      name='nudge_mask_u')
+# #ds_mask_u_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_u_zeros_ones.nc')
 
-# ones and nans
-ds_mask_u_ones_nans = xr.DataArray(data=nudge_mask_u_nan,
-                                      dims=['eta_u', 'xi_u'],
-                                     coords=dict(eta_u=(['eta_u'], grid.eta_u.values), 
-                                                 xi_u=(['xi_u'], grid.xi_u.values)),
-                                     name='nudge_mask_u_nan')
-#ds_mask_u_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_u_ones_nans.nc')
+# # ones and nans
+# ds_mask_u_ones_nans = xr.DataArray(data=nudge_mask_u_nan,
+#                                       dims=['eta_u', 'xi_u'],
+#                                      coords=dict(eta_u=(['eta_u'], grid.eta_u.values), 
+#                                                  xi_u=(['xi_u'], grid.xi_u.values)),
+#                                      name='nudge_mask_u_nan')
+# #ds_mask_u_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_u_ones_nans.nc')
 
-# V masks 
-# zeros and ones
-ds_mask_v_zeros_ones = xr.DataArray(data=nudge_mask_v,
-                                      dims=['eta_v', 'xi_v'],
-                                     coords=dict(eta_v=(['eta_v'], grid.eta_v.values), 
-                                                 xi_v=(['xi_v'], grid.xi_v.values)),
-                                     name='nudge_mask_v')
-#ds_mask_v_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_v_zeros_ones.nc')
+# # V masks 
+# # zeros and ones
+# ds_mask_v_zeros_ones = xr.DataArray(data=nudge_mask_v,
+#                                       dims=['eta_v', 'xi_v'],
+#                                      coords=dict(eta_v=(['eta_v'], grid.eta_v.values), 
+#                                                  xi_v=(['xi_v'], grid.xi_v.values)),
+#                                      name='nudge_mask_v')
+# #ds_mask_v_zeros_ones.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_v_zeros_ones.nc')
 
-# ones and nans
-ds_mask_v_ones_nans = xr.DataArray(data=nudge_mask_v_nan,
-                                      dims=['eta_v', 'xi_v'],
-                                     coords=dict(eta_v=(['eta_v'], grid.eta_v.values), 
-                                                 xi_v=(['xi_v'], grid.xi_v.values)),
-                                     name='nudge_mask_v_nan')
-#ds_mask_v_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_v_ones_nans.nc')
+# # ones and nans
+# ds_mask_v_ones_nans = xr.DataArray(data=nudge_mask_v_nan,
+#                                       dims=['eta_v', 'xi_v'],
+#                                      coords=dict(eta_v=(['eta_v'], grid.eta_v.values), 
+#                                                  xi_v=(['xi_v'], grid.xi_v.values)),
+#                                      name='nudge_mask_v_nan')
+# #ds_mask_v_ones_nans.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Code/Nudge_masks/nudge_mask_v_ones_nans.nc')
 
 
 # -------------------------------------------------------------------------------
 # ---- Make a netcdf to hold the ubar and vbar clm data used for plotting 
 # -------------------------------------------------------------------------------
-# Set up the data
-depth_avg_currents_clm = xr.Dataset(
-    data_vars=dict(
-        ubar_avg_masked=(['ocean_time'], ubar_avg_masked),
-        vbar_avg_masked=(['ocean_time'], vbar_avg_masked),
-        ),
-    coords=dict(
-        ocean_time=time_data_cur
-        ),
-    attrs=dict(units='meter per second', description='depth-averaged water momentum, averaged over the domain'))
+# # Set up the data
+# depth_avg_currents_clm = xr.Dataset(
+#     data_vars=dict(
+#         ubar_avg_masked=(['ocean_time'], ubar_avg_masked),
+#         vbar_avg_masked=(['ocean_time'], vbar_avg_masked),
+#         ),
+#     coords=dict(
+#         ocean_time=time_data_cur
+#         ),
+#     attrs=dict(units='meter per second', description='depth-averaged water momentum, averaged over the domain'))
 
 # Save this to a netcdf
 #depth_avg_currents_clm.to_netcdf('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska/Paper1/Data/fig3_ubar_vbar_clm.nc')
