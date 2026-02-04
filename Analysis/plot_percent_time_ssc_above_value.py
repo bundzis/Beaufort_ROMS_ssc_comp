@@ -162,7 +162,7 @@ def interp_roms_ssc_from_top(filenames, time_len, eta_rho_len, xi_rho_len, time_
         # Set two depths, 1 m above seafloor
         #depths = np.asarray([1.0])
 
-        # Interopolate onto the given CODA depths
+        # Interopolate onto the given depths
         ssc_allsed_interp_top_1m = xroms.isoslice((ds.sand_01+ds.sand_02+ds.sand_03+ds.mud_01+ds.mud_02+ds.mud_03+ds.mud_04+ds.mud_05+ds.mud_06+
                                                    ds.mud_07+ds.mud_08+ds.mud_09+ds.mud_10+ds.mud_11+ds.mud_12+ds.mud_13+ds.mud_14+ds.mud_15+ds.mud_16+
                                                    ds.mud_17+ds.mud_18+ds.mud_19+ds.mud_20+ds.mud_21+ds.mud_22+ds.mud_23+ds.mud_24), depths, xgrid)
