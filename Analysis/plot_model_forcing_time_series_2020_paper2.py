@@ -1499,7 +1499,7 @@ bax22.plot(time_data_riv[:-4], water_dis_tot_std[:-4], color='black', label='$\\
 bax22.plot(time_data_riv[:-4], water_dis_kal_std[:-4], label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
 bax22.plot(time_data_riv[:-4], water_dis_fis_std[:-4], label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
 bax22.plot(time_data_riv[:-4], water_dis_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
-bax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+bax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparuk}$', linewidth=5, color=river_colors[3])
 bax22.plot(time_data_riv[:-4], water_dis_sag_std[:-4], label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
 bax22.plot(time_data_riv[:-4], water_dis_sta_std[:-4], label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
 bax22.plot(time_data_riv[:-4], water_dis_can_std[:-4], label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
@@ -1534,7 +1534,7 @@ fig15.text(0.092, 0.393, '800', color='black', fontsize=30)
 # River sediment discharge (Broken Axis)
 # ----------------------
 bax23 = brokenaxes(
-    ylims=[(0, 200), (200, 4500)],     # adjust for your data
+    ylims=[(0, 200), (200, 2000)],     # adjust for your data #(0, 200), (200, 4500)
     hspace=0.05,
     height_ratios=[1,2],
     subplot_spec=gs3[5],
@@ -1573,11 +1573,11 @@ bax23 = brokenaxes(
 # =============================================================================
 # River SSC
 # Standard
-bax23.plot(time_data_riv[:-4], water_ssc_tot_std[:-4]*1000, color='black', label='$\\bf{Total}$', linewidth=5)
+#bax23.plot(time_data_riv[:-4], water_ssc_tot_std[:-4]*1000, color='black', label='$\\bf{Total}$', linewidth=5)
 bax23.plot(time_data_riv[:-4], water_ssc_kal_std[:-4]*1000, label='$\\bf{Kalikpik}$', linewidth=5, color=river_colors[0])
 bax23.plot(time_data_riv[:-4], water_ssc_fis_std[:-4]*1000, label='$\\bf{Fish Creek}$', linewidth=5, color=river_colors[1])
 bax23.plot(time_data_riv[:-4], water_ssc_col_std[:-4]*1000, label='$\\bf{Colville}$', linewidth=5, color=river_colors[2])
-bax23.plot(time_data_riv[:-4], water_ssc_kup_std[:-4]*1000, label='$\\bf{Kuparik}$', linewidth=5, color=river_colors[3])
+bax23.plot(time_data_riv[:-4], water_ssc_kup_std[:-4]*1000, label='$\\bf{Kuparuk}$', linewidth=5, color=river_colors[3])
 bax23.plot(time_data_riv[:-4], water_ssc_sag_std[:-4]*1000, label='$\\bf{Sagavanirktok}$', linewidth=5, color=river_colors[4])
 bax23.plot(time_data_riv[:-4], water_ssc_sta_std[:-4]*1000, label='$\\bf{Staines}$', linewidth=5, color=river_colors[5])
 bax23.plot(time_data_riv[:-4], water_ssc_can_std[:-4]*1000, label='$\\bf{Canning}$', linewidth=5, color=river_colors[6])
@@ -1586,7 +1586,7 @@ bax23.plot(time_data_riv[:-4], water_ssc_hul_std[:-4]*1000, label='$\\bf{Hulahul
 bax23.plot(time_data_riv[:-4], water_ssc_jag_std[:-4]*1000, label='$\\bf{Jago}$', linewidth=5, color=river_colors[9])
 
 # Double
-bax23.plot(time_data_riv[:-4], water_ssc_tot_double[:-4]*1000, color='black', linewidth=5, linestyle='--')
+#bax23.plot(time_data_riv[:-4], water_ssc_tot_double[:-4]*1000, color='black', linewidth=5, linestyle='--')
 bax23.plot(time_data_riv[:-4], water_ssc_kal_double[:-4]*1000, linewidth=5, color=river_colors[0], linestyle='--')
 bax23.plot(time_data_riv[:-4], water_ssc_fis_double[:-4]*1000, linewidth=5, color=river_colors[1], linestyle='--')
 bax23.plot(time_data_riv[:-4], water_ssc_col_double[:-4]*1000, linewidth=5, color=river_colors[2], linestyle='--')
@@ -1612,13 +1612,18 @@ fig15.text(0.092, 0.227, '200', color='black', fontsize=30)
 fig15.text(0.092, 0.209, '200', color='black', fontsize=30)
 
 # Legend for bottom plot
-bax23.legend(fontsize=35, labelspacing=0.05, ncol=3, columnspacing=0.92, bbox_to_anchor=(0.80,-0.25))
+#bax23.legend(fontsize=35, labelspacing=0.05, ncol=3, columnspacing=0.92, bbox_to_anchor=(0.80,-0.25))
+ax_leg = bax22.axs[0]
+handles, labels = ax_leg.get_legend_handles_labels()
+legend1 = ax_leg.legend(handles=handles, labels=labels, fontsize=35, labelspacing=0.05, ncol=3, columnspacing=0.92, bbox_to_anchor=(0.80,-6.5))
 
 # Make legend for dashed vs solid lines 
 solid_line = Line2D([0], [0], color='grey', linestyle='-', linewidth=5)
 dashed_line = Line2D([0], [0], color='grey', linestyle='--', linewidth=5)
-bax22.legend(handles=[solid_line, dashed_line], labels=['Standard', 'Doubled'], loc='upper right',
+legend2 = ax_leg.legend(handles=[solid_line, dashed_line], labels=['Standard', 'Doubled'], loc='upper right',
              fontsize=35)
+
+ax_leg.add_artist(legend1)
 
 
 # Manually add the legend using the custom handles and labels
@@ -1627,14 +1632,14 @@ bax22.legend(handles=[solid_line, dashed_line], labels=['Standard', 'Doubled'], 
 # ----------------------
 # Panel labels (a–f)
 # ----------------------
-plt.text(0.131, 0.856, 'a)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
-plt.text(0.131, 0.755, 'b)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
-plt.text(0.131, 0.660, 'c)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
-plt.text(0.131, 0.565, 'd)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
-plt.text(0.131, 0.462, 'e)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
-plt.text(0.131, 0.280, 'f)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.858, 'a)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.756, 'b)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.658, 'c)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.555, 'd)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.455, 'e)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
+plt.text(0.131, 0.270, 'f)', fontsize=40, fontweight='bold', transform=plt.gcf().transFigure)
 
-plt.subplots_adjust(hspace=0.08)
+plt.subplots_adjust(hspace=0.18)
 
 
 
