@@ -1337,10 +1337,9 @@ percent_local_resuspended_over_time = xr.Dataset(
 
 # Save to a netcdf
 # Aggregated 
-percent_local_resuspended_over_time.to_netcdf('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspended_over_time_aggregated.nc')
+#percent_local_resuspended_over_time.to_netcdf('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspended_over_time_aggregated.nc')
 # Unaggregated 
 #percent_local_resuspended_over_time.to_netcdf('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspended_over_time_unaggregated.nc')
-
 
 # Make list of colors to use for plots
 seabed_section_colors = ['#D1C8FB', '#F4B6D3', '#FFC8B0', '#FFE3B2', '#A190F4', 
@@ -1352,94 +1351,94 @@ seabed_section_colors = ['#D1C8FB', '#F4B6D3', '#FFC8B0', '#FFE3B2', '#A190F4',
 # # --------------------------------------------------------------------------------
 # # --------------- Plot 1: Box and Whisker Plot for Section(s)... -----------------
 # # --------------------------------------------------------------------------------
-# Make a box and whiskers plot of the percent of local resuspension over time
-# in multiple sections, one plot for each section 
+# # Make a box and whiskers plot of the percent of local resuspension over time
+# # in multiple sections, one plot for each section 
 
-# Make the figure 
-fig1, ax1 = plt.subplots(figsize=(16,8))
+# # Make the figure 
+# fig1, ax1 = plt.subplots(figsize=(16,8))
 
-# Make labels
-section_names_long = ['Section 1', 'Section 2', 'Section 3', 'Section 4', 'Section 5', 
-                 'Section 6', 'Section 7', 'Section 8', 'Section 9', 'Section 10',
-                 'Section 11', 'Section 12', 'Section 13']
-section_names_short = ['1', '2', '3', '4', '5', 
-                 '6', '7', '8', '9', '10',
-                 '11', '12', '13']
+# # Make labels
+# section_names_long = ['Section 1', 'Section 2', 'Section 3', 'Section 4', 'Section 5', 
+#                  'Section 6', 'Section 7', 'Section 8', 'Section 9', 'Section 10',
+#                  'Section 11', 'Section 12', 'Section 13']
+# section_names_short = ['1', '2', '3', '4', '5', 
+#                  '6', '7', '8', '9', '10',
+#                  '11', '12', '13']
 
-# Combine the data into a list
-local_resusp_all_sections = [percent_local_resuspended_over_time_sec1, percent_local_resuspended_over_time_sec2,
-                             percent_local_resuspended_over_time_sec3, percent_local_resuspended_over_time_sec4,
-                             percent_local_resuspended_over_time_sec5, percent_local_resuspended_over_time_sec6,
-                             percent_local_resuspended_over_time_sec7, percent_local_resuspended_over_time_sec8,
-                             percent_local_resuspended_over_time_sec9, percent_local_resuspended_over_time_sec10,
-                             percent_local_resuspended_over_time_sec11, percent_local_resuspended_over_time_sec12,
-                             percent_local_resuspended_over_time_sec13]
+# # Combine the data into a list
+# local_resusp_all_sections = [percent_local_resuspended_over_time_sec1, percent_local_resuspended_over_time_sec2,
+#                              percent_local_resuspended_over_time_sec3, percent_local_resuspended_over_time_sec4,
+#                              percent_local_resuspended_over_time_sec5, percent_local_resuspended_over_time_sec6,
+#                              percent_local_resuspended_over_time_sec7, percent_local_resuspended_over_time_sec8,
+#                              percent_local_resuspended_over_time_sec9, percent_local_resuspended_over_time_sec10,
+#                              percent_local_resuspended_over_time_sec11, percent_local_resuspended_over_time_sec12,
+#                              percent_local_resuspended_over_time_sec13]
 
-# Plot?
-ax1.boxplot(local_resusp_all_sections[0], labels=section_names_short[0])
+# # Plot?
+# ax1.boxplot(local_resusp_all_sections[0], labels=section_names_short[0])
 
-# Label the plot
-ax1.set_xlabel('Section', fontsize=fontsize-2)
-ax1.set_ylabel('Percent Locally Resuspended', fontsize=fontsize-2)
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-
-# Save the figure
-#plt.savefig('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspension_all_sections_test_001.png', transparent=True, bbox_inches='tight')
-
-
-# # Sample data for multiple boxplots
-# data1 = np.random.normal(0, 1, 100)
-# data2 = np.random.normal(2, 1.5, 100)
-# data3 = np.random.normal(-1, 0.8, 100)
-
-# # Combine data into a list
-# data_to_plot = [data1, data2, data3]
-
-# # Create the boxplot
-# plt.figure(figsize=(8, 6))
-# plt.boxplot(data_to_plot, labels=['Group 1', 'Group 2', 'Group 3'])
-# plt.title('Multiple Boxplots on Same Axes')
-# plt.xlabel('Group')
-# plt.ylabel('Value')
+# # Label the plot
+# ax1.set_xlabel('Section', fontsize=fontsize-2)
+# ax1.set_ylabel('Percent Locally Resuspended', fontsize=fontsize-2)
 # plt.grid(axis='y', linestyle='--', alpha=0.7)
-# plt.show()
+
+# # Save the figure
+# #plt.savefig('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspension_all_sections_test_001.png', transparent=True, bbox_inches='tight')
+
+
+# # # Sample data for multiple boxplots
+# # data1 = np.random.normal(0, 1, 100)
+# # data2 = np.random.normal(2, 1.5, 100)
+# # data3 = np.random.normal(-1, 0.8, 100)
+
+# # # Combine data into a list
+# # data_to_plot = [data1, data2, data3]
+
+# # # Create the boxplot
+# # plt.figure(figsize=(8, 6))
+# # plt.boxplot(data_to_plot, labels=['Group 1', 'Group 2', 'Group 3'])
+# # plt.title('Multiple Boxplots on Same Axes')
+# # plt.xlabel('Group')
+# # plt.ylabel('Value')
+# # plt.grid(axis='y', linestyle='--', alpha=0.7)
+# # plt.show()
 
 
 
-# # --------------------------------------------------------------------------------
-# # --------------- Plot 2: Line Plot for Section(s)... -----------------
-# # --------------------------------------------------------------------------------
-# Try to make a line plot for the sections 
+# # # --------------------------------------------------------------------------------
+# # # --------------- Plot 2: Line Plot for Section(s)... -----------------
+# # # --------------------------------------------------------------------------------
+# # Try to make a line plot for the sections 
 
-# Make the figure 
-fig2, ax2 = plt.subplots(figsize=(16,8))
-
-
-# Plot each section as a line 
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec1, color=seabed_section_colors[0], label=section_names_long[0], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec2, color=seabed_section_colors[1], label=section_names_long[1], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec3, color=seabed_section_colors[2], label=section_names_long[2], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec4, color=seabed_section_colors[3], label=section_names_long[3], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec5, color=seabed_section_colors[4], label=section_names_long[4], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec6, color=seabed_section_colors[5], label=section_names_long[5], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec7, color=seabed_section_colors[6], label=section_names_long[6], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec8, color=seabed_section_colors[7], label=section_names_long[7], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec9, color=seabed_section_colors[8], label=section_names_long[8], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec10, color=seabed_section_colors[9], label=section_names_long[9], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec11, color=seabed_section_colors[10], label=section_names_long[10], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec12, color=seabed_section_colors[11], label=section_names_long[11], linewidth=3)
-ax2.plot(time_steps, percent_local_resuspended_over_time_sec13, color=seabed_section_colors[12], label=section_names_long[12], linewidth=3)
+# # Make the figure 
+# fig2, ax2 = plt.subplots(figsize=(16,8))
 
 
+# # Plot each section as a line 
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec1, color=seabed_section_colors[0], label=section_names_long[0], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec2, color=seabed_section_colors[1], label=section_names_long[1], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec3, color=seabed_section_colors[2], label=section_names_long[2], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec4, color=seabed_section_colors[3], label=section_names_long[3], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec5, color=seabed_section_colors[4], label=section_names_long[4], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec6, color=seabed_section_colors[5], label=section_names_long[5], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec7, color=seabed_section_colors[6], label=section_names_long[6], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec8, color=seabed_section_colors[7], label=section_names_long[7], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec9, color=seabed_section_colors[8], label=section_names_long[8], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec10, color=seabed_section_colors[9], label=section_names_long[9], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec11, color=seabed_section_colors[10], label=section_names_long[10], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec12, color=seabed_section_colors[11], label=section_names_long[11], linewidth=3)
+# ax2.plot(time_steps, percent_local_resuspended_over_time_sec13, color=seabed_section_colors[12], label=section_names_long[12], linewidth=3)
 
-# Label the plot
-ax2.set_xlabel('Time', fontsize=fontsize-2)
-ax2.set_ylabel('Percent Locally Resuspended', fontsize=fontsize-2)
-ax2.legend(fontsize=fontsize-3, ncols=3)
-#plt.grid(axis='y', linestyle='--', alpha=0.7)
 
-# Save the figure
-#plt.savefig('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspension_timeseries_test_001.png', transparent=True, bbox_inches='tight')
+
+# # Label the plot
+# ax2.set_xlabel('Time', fontsize=fontsize-2)
+# ax2.set_ylabel('Percent Locally Resuspended', fontsize=fontsize-2)
+# ax2.legend(fontsize=fontsize-3, ncols=3)
+# #plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# # Save the figure
+# #plt.savefig('/projects/brun1463/ROMS/Beaufort_Shelf_Rivers_Alpine_002/Scripts/Analysis/Percent_local_resuspension/percent_local_resuspension_timeseries_test_001.png', transparent=True, bbox_inches='tight')
 
 
 
