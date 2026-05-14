@@ -1689,6 +1689,12 @@ ax2[2].legend(fontsize=fontsize-2)
 # Label the axes
 ax2[2].set_xlabel('Modeled SSC (mg/L)', fontsize=fontsize-2)
 ax2[2].set_ylabel('Observed SSC (mg/L)', fontsize=fontsize-2)
+# Make log-log scale
+ax2[2].set_xscale('log')
+ax2[2].set_yscale('log')
+ax2[2].set_xlim(10e-2,10e1)
+ax2[2].set_ylim(10e-2,10e1)
+ax2[2].set_aspect(1.0)
 
 # Adjust spacing
 fig2.subplots_adjust(hspace=0.22, wspace=0.17)
