@@ -50,6 +50,12 @@ grid = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska_201
 # Load in some output
 #output = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska_2020/Model_Output/dbsed0003/ocean_his_beaufort_shelf_2020_dbsed0003_0001.nc') 
 
+# Make a plot of all of the rivers discharge time series 
+# River Order: Kalikpik, Fish Creek, Colville, Kuparuk, 
+# Sagavanirktok, Staines, Canning, Katakturuk, Hulahula, Jago
+river_colors = ['#FC440F', '#F5ED00', '#5EF38C', '#F43ECF',
+                       '#0115F5', '#00A6A6', '#AB64EB', '#D44179', '#08E0E3', '#B27009']
+
 
 # -------------------------------------------------
 # ------ Plot 1: Ocean Bathymetry and Grid ------
@@ -144,9 +150,9 @@ vbar_clm = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska
 # Waves 
 wave_frc = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Beaufort_Shelf_Rivers_proj_002/Model_Input/wave_forcing_file_kaktovik_shelf_cop_2020_data002.nc')
 # Rivers
-# use river_forcing_file_kaktovik_shelf_radr_data_003.nc if using new model output
-river_frc = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Beaufort_Shelf_Rivers_proj_002/Model_Input/Rivers/river_forcing_file_beaufort_shelf_10rivs_13seabed_blaskey_data_sagDSS3_rating_001.nc') 
-# Sea ice concentration 
+river_frc_std = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Beaufort_Shelf_Rivers_proj_002/Model_Input/Rivers/river_forcing_file_beaufort_shelf_10rivs_13seabed_blaskey_data_sagDSS3_rating_001.nc') 
+river_frc_double = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Beaufort_Shelf_Rivers_proj_002/Model_Input/Rivers/river_forcing_file_beaufort_shelf_10rivs_13seabed_blaskey_data_sagDSS3_rating_double_dis_001.nc') 
+#river_frc_std = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Beaufort_Shelf_Rivers_proj_002/Model_Input/Rivers/river_forcing_file_beaufort_shelf_10rivs_13seabed_blaskey_data_sagDSS3_rating_001.nc') # Sea ice concentration 
 ice_data = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska_2020/Model_Inputs/Forcing_files/sea_ice_concentration_forcing_file_beaufort_shelf_nsidc_2020_data001.nc')
 # Load in the surface stress
 sustr_frc = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alaska_2020/Model_Inputs/Forcing_files/sustr_forcing_file_kaktovik_shelf_hycom_data_2020_001.nc')
@@ -158,7 +164,7 @@ svstr_frc = xr.open_dataset('/Users/brun1463/Desktop/Research_Lab/Kaktovik_Alask
 #time_data_wind = pd.to_datetime(wind_frc.wind_time.values+86400, origin=pd.datetime(1999,12,31), unit='s') # or try from datetime import datetime then jsut use datetime
 time_data_wave = pd.to_datetime(wave_frc.wave_time.values+86400, origin=pd.datetime(1999,12,31), unit='s')
 time_data_cur = pd.to_datetime(ubar_clm.v2d_time.values+86400, origin=pd.datetime(1999,12,31), unit='s')
-time_data_riv = river_frc.river_time.values
+time_data_riv = river_frc_std.river_time.values
 time_data_ice = pd.to_datetime(ice_data.ice_time.values+86400, origin=pd.datetime(1999,12,31), unit='s')
 time_data_sustr = pd.to_datetime(sustr_frc.sms_time.values+86400, origin=pd.datetime(1999,12,31), unit='s')
 time_data_svstr = pd.to_datetime(svstr_frc.sms_time.values+86400, origin=pd.datetime(1999,12,31), unit='s')
@@ -178,27 +184,118 @@ sustr_avg = sustr_frc.sustr.mean(dim=('eta_u', 'xi_u'))
 svstr_avg = svstr_frc.svstr.mean(dim=('eta_v', 'xi_v'))
 
 # Pre-process - add together river inputs
-water_dis_tot = river_frc.river_transport.sum(dim='river')
-water_dis_col = river_frc.river_transport[:,1:7].sum(dim='river')
-#water_dis_kuk = river_frc.river_transport[:,12].values
-water_dis_kup = river_frc.river_transport[:,12].values + river_frc.river_transport[:,13].values
-# Add together all of the sediment classes
-riv_all_ssc = river_frc.river_mud_01 + river_frc.river_mud_02 + river_frc.river_sand_01 + river_frc.river_sand_02 + river_frc.river_sand_03
-water_sed_tot = riv_all_ssc.sum(dim='river')
-water_sed_col = riv_all_ssc[:,1:7].sum(dim='river')
-#water_sed_kuk = riv_all_ssc[:,12]
-water_sed_kup = riv_all_ssc[:,12] + riv_all_ssc[:,13]
-# Mulitply this by the water discharge to get river sediment discharge 
-water_sed_tot_kgs = water_sed_tot*water_dis_tot
-water_sed_col_kgs = water_sed_col*water_dis_col
-#water_sed_kuk_kgs = water_sed_kuk*water_dis_kuk
-water_sed_kup_kgs = water_sed_kup*water_dis_kup
-# Take 2 for river sediment load 
-# I think this one below is more correct so use this instead for plots 
-water_sed_tot_kgs_2 = (river_frc.river_transport*riv_all_ssc).sum(dim='river')
-water_sed_col_kgs_2 = (river_frc.river_transport[:,1:7]*riv_all_ssc[:,1:7]).sum(dim='river')
-#water_sed_kuk_kgs_2 = (river_frc.river_transport[:,12]*riv_all_ssc[:,12])
-water_sed_kup_kgs_2 = ((river_frc.river_transport[:,12]+river_frc.river_transport[:,13])*(riv_all_ssc[:,12]+riv_all_ssc[:,13]))
+# Make a function that takes the river input, the idnices, and returns the discharge and 
+# sediemnt load for a given river
+def get_river_dis_sed(river_frc, first_idx, run, last_idx=2000):
+    """
+    The purpose of this function is to get atime series fo the river discharge
+    and sediment load for a given river.
+    
+    Inputs:
+        - river_frc: River forcing file loaded via xarray
+        - first_idx: First index of the river in the forcing file (or only index if only one)
+        - last_idx: Last index of the river in the forcing file
+        - run: string of the run, either 'std' or 'double'
+    Outputs:
+        - river_dis: Time series of river discharge for that river
+        - river_sed: Tiem series of river sediment load for that river
+    """
+    print('first_idx: ', first_idx)
+    print('last_idx: ', last_idx)
+    
+    # Get the transport
+    # Check if the river covers multiple cells
+    if (last_idx != 2000):
+        # Get the discharge 
+        river_dis = river_frc.river_transport[:,first_idx:last_idx+1].sum(dim='river')
+        #print('river_dis shape multiple cells: ', np.shape(river_dis))
+    else:
+        river_dis = river_frc.river_transport[:,first_idx]
+        #print('river_dis shape one cells: ', np.shape(river_dis))
+    
+    # Get the sediment load
+    # Add together all of the sediment classes
+    if run == 'std':
+        riv_all_ssc = (river_frc.river_sand_01 + river_frc.river_sand_02 + river_frc.river_sand_03 + 
+                      river_frc.river_mud_01 + river_frc.river_mud_02 + river_frc.river_mud_03 + river_frc.river_mud_04 + 
+                      river_frc.river_mud_05 + river_frc.river_mud_06 + river_frc.river_mud_07 + river_frc.river_mud_08 + 
+                      river_frc.river_mud_09 + river_frc.river_mud_10 + river_frc.river_mud_11 + river_frc.river_mud_12 + 
+                      river_frc.river_mud_13 + river_frc.river_mud_14 + river_frc.river_mud_15 + river_frc.river_mud_16 + 
+                      river_frc.river_mud_17 + river_frc.river_mud_18 + river_frc.river_mud_19 + river_frc.river_mud_20 + 
+                      river_frc.river_mud_21 + river_frc.river_mud_22 + river_frc.river_mud_23 + river_frc.river_mud_24) 
+    if run == 'double':
+        riv_all_ssc = (river_frc.river_sand_01 + river_frc.river_sand_02 + river_frc.river_sand_03 + 
+                      river_frc.river_mud_01 + river_frc.river_mud_02 + river_frc.river_mud_03 + river_frc.river_mud_04)
+        
+    
+    # Multiply to get the load and save ssc
+    if last_idx != 2000:
+        river_sed = (river_frc.river_transport[:,first_idx:last_idx+1]*riv_all_ssc[:,first_idx:last_idx+1]).sum(dim='river')
+        river_ssc = riv_all_ssc[:,first_idx:last_idx+1].sum(dim='river')
+    else:
+        river_sed = (river_frc.river_transport[:,first_idx]*riv_all_ssc[:,first_idx])
+        river_ssc = riv_all_ssc[:,first_idx]
+        
+    # Return these values
+    return(river_dis, river_sed, river_ssc)
+
+# Call the function for each river 
+# Standard run 
+water_dis_tot_std, water_sed_tot_std, water_ssc_tot_std = get_river_dis_sed(river_frc_std, 0, 'std', -2)
+water_dis_kal_std, water_sed_kal_std, water_ssc_kal_std = get_river_dis_sed(river_frc_std, 0, 'std')
+water_dis_col_std, water_sed_col_std, water_ssc_col_std = get_river_dis_sed(river_frc_std, 1, 'std', 6)
+water_dis_sag_std, water_sed_sag_std, water_ssc_sag_std = get_river_dis_sed(river_frc_std, 7, 'std', 9)
+water_dis_fis_std, water_sed_fis_std, water_ssc_fis_std = get_river_dis_sed(river_frc_std, 10, 'std')
+water_dis_kup_std, water_sed_kup_std, water_ssc_kup_std = get_river_dis_sed(river_frc_std, 11, 'std')
+water_dis_sta_std, water_sed_sta_std, water_ssc_sta_std = get_river_dis_sed(river_frc_std, 12, 'std')
+water_dis_can_std, water_sed_can_std, water_ssc_can_std = get_river_dis_sed(river_frc_std, 13, 'std')
+water_dis_kat_std, water_sed_kat_std, water_ssc_kat_std = get_river_dis_sed(river_frc_std, 14, 'std')
+water_dis_hul_std, water_sed_hul_std, water_ssc_hul_std = get_river_dis_sed(river_frc_std, 15, 'std')
+water_dis_jag_std, water_sed_jag_std, water_ssc_jag_std = get_river_dis_sed(river_frc_std, 16, 'std')
+
+# Double discharge 
+water_dis_tot_double, water_sed_tot_double, water_ssc_tot_double = get_river_dis_sed(river_frc_double, 0, 'double', -2)
+water_dis_kal_double, water_sed_kal_double, water_ssc_kal_double = get_river_dis_sed(river_frc_double, 0, 'double')
+water_dis_col_double, water_sed_col_double, water_ssc_col_double = get_river_dis_sed(river_frc_double, 1, 'double', 6)
+water_dis_sag_double, water_sed_sag_double, water_ssc_sag_double = get_river_dis_sed(river_frc_double, 7, 'double', 9)
+water_dis_fis_double, water_sed_fis_double, water_ssc_fis_double = get_river_dis_sed(river_frc_double, 10, 'double')
+water_dis_kup_double, water_sed_kup_double, water_ssc_kup_double = get_river_dis_sed(river_frc_double, 11, 'double')
+water_dis_sta_double, water_sed_sta_double, water_ssc_sta_double = get_river_dis_sed(river_frc_double, 12, 'double')
+water_dis_can_double, water_sed_can_double, water_ssc_can_double = get_river_dis_sed(river_frc_double, 13, 'double')
+water_dis_kat_double, water_sed_kat_double, water_ssc_kat_double = get_river_dis_sed(river_frc_double, 14, 'double')
+water_dis_hul_double, water_sed_hul_double, water_ssc_hul_double = get_river_dis_sed(river_frc_double, 15, 'double')
+water_dis_jag_double, water_sed_jag_double, water_ssc_jag_double = get_river_dis_sed(river_frc_double, 16, 'double')
+
+
+
+
+
+
+# =============================================================================
+# water_dis_tot = river_frc.river_transport.sum(dim='river')
+# water_dis_col = river_frc.river_transport[:,1:7].sum(dim='river')
+# #water_dis_kuk = river_frc.river_transport[:,12].values
+# water_dis_kup = river_frc.river_transport[:,12].values + river_frc.river_transport[:,13].values
+# # Add together all of the sediment classes
+# riv_all_ssc = river_frc.river_mud_01 + river_frc.river_mud_02 + river_frc.river_sand_01 + river_frc.river_sand_02 + river_frc.river_sand_03
+# water_sed_tot = riv_all_ssc.sum(dim='river')
+# water_sed_col = riv_all_ssc[:,1:7].sum(dim='river')
+# #water_sed_kuk = riv_all_ssc[:,12]
+# water_sed_kup = riv_all_ssc[:,12] + riv_all_ssc[:,13]
+# # Mulitply this by the water discharge to get river sediment discharge 
+# water_sed_tot_kgs = water_sed_tot*water_dis_tot
+# water_sed_col_kgs = water_sed_col*water_dis_col
+# #water_sed_kuk_kgs = water_sed_kuk*water_dis_kuk
+# water_sed_kup_kgs = water_sed_kup*water_dis_kup
+# # Take 2 for river sediment load 
+# # I think this one below is more correct so use this instead for plots 
+# water_sed_tot_kgs_2 = (river_frc.river_transport*riv_all_ssc).sum(dim='river')
+# water_sed_col_kgs_2 = (river_frc.river_transport[:,1:7]*riv_all_ssc[:,1:7]).sum(dim='river')
+# #water_sed_kuk_kgs_2 = (river_frc.river_transport[:,12]*riv_all_ssc[:,12])
+# water_sed_kup_kgs_2 = ((river_frc.river_transport[:,12]+river_frc.river_transport[:,13])*(riv_all_ssc[:,12]+riv_all_ssc[:,13]))
+# 
+# =============================================================================
+
 
 # Pre-process - take spatial averaged of sea ice
 # Find the max, min, median
@@ -252,7 +349,7 @@ yticks2 = ax2.yaxis.get_major_ticks()
 # River water discharge
 # shared axis X
 ax3 = plt.subplot(gs[3], sharex = ax0)
-line3, = ax3.plot(time_data_riv, water_dis_tot, color='deepskyblue', label='$\\bf{River Water Discharge}$', linewidth=8) #time_data_riv[:40] for July 
+line3, = ax3.plot(time_data_riv, water_dis_tot_std, color='deepskyblue', label='$\\bf{River Water Discharge}$', linewidth=8) #time_data_riv[:40] for July 
 plt.setp(ax3.get_xticklabels(), visible=False)
 #ax3.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
 ax3.set_ylabel('Water \nDischarge \n(m\u00b3/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=120, va='center')
@@ -263,7 +360,7 @@ yticks3 = ax3.yaxis.get_major_ticks()
 # River sediment discharge
 # shared axis X
 ax4 = plt.subplot(gs[4], sharex = ax0)
-line4, = ax4.plot(time_data_riv, water_sed_tot_kgs, color='peru', label='$\\bf{River Sediment Load}$', linewidth=8) #time_data_riv[:40] for July 
+line4, = ax4.plot(time_data_riv, water_sed_tot_std, color='peru', label='$\\bf{River Sediment Load}$', linewidth=8) #time_data_riv[:40] for July 
 plt.setp(ax4.get_xticklabels(), visible=False)
 #ax4.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
 ax4.set_ylabel('River \nSediment \nLoad \n(kg/s)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=110, va='center')
@@ -591,12 +688,12 @@ yticks15 = ax15.yaxis.get_major_ticks()
 # River water discharge
 # shared axis X
 ax16 = plt.subplot(gs2[3], sharex = ax13)
-line3, = ax16.plot(time_data_riv, water_dis_tot, color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
+line3, = ax16.plot(time_data_riv, water_dis_tot_std, color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
 # Colville
-ax16.plot(time_data_riv, water_dis_col, label='$\\bf{Colville}$', linewidth=5, 
+ax16.plot(time_data_riv, water_dis_col_std, label='$\\bf{Colville}$', linewidth=5, 
             color='m')
 # Kukpuk 
-ax16.plot(time_data_riv, water_dis_kup, label='$\\bf{Kuparuk}$', linewidth=5,
+ax16.plot(time_data_riv, water_dis_kup_std, label='$\\bf{Kuparuk}$', linewidth=5,
             color='peru')
 plt.setp(ax16.get_xticklabels(), visible=False)
 #ax3.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -608,12 +705,12 @@ yticks16 = ax16.yaxis.get_major_ticks()
 # River sediment discharge
 # shared axis X
 ax17 = plt.subplot(gs2[4], sharex = ax13)
-line4, = ax17.plot(time_data_riv, water_sed_tot_kgs_2, color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
+line4, = ax17.plot(time_data_riv, water_sed_tot_std, color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
 # Colville
-ax17.plot(time_data_riv, water_sed_col_kgs_2, label='$\\bf{Colville}$', linewidth=5,
+ax17.plot(time_data_riv, water_sed_col_std, label='$\\bf{Colville}$', linewidth=5,
             color='m')
 # Kukpuk 
-ax17.plot(time_data_riv, water_sed_kup_kgs_2, label='$\\bf{Kuparuk}$', linewidth=5, 
+ax17.plot(time_data_riv, water_sed_kup_std, label='$\\bf{Kuparuk}$', linewidth=5, 
             color='peru')
 plt.setp(ax17.get_xticklabels(), visible=False)
 #ax4.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -754,17 +851,17 @@ plt.subplots_adjust(hspace=.08)
 # input to the shelf over the run
 # Take the kg/s values for total and multiply it by dt, then add up 
 # dt is daily = 86400 seconds 
-water_sed_tot_kg = np.sum(water_sed_tot_kgs_2*86400)
+water_sed_tot_kg = np.sum(water_sed_tot_std*86400)
 print('total kg sediment delivered: ', water_sed_tot_kg)
 
 # Print the maximum total sediment load 
-print('Maximum total sediment load (kg/s): ', np.max(water_sed_tot_kgs_2))
+print('Maximum total sediment load (kg/s): ', np.max(water_sed_tot_std))
 
 # Print min Colville sediment conc 
-print('min Colville Sediment conc (kg/m3): ', np.min(water_sed_col))
+print('min Colville Sediment conc (kg/m3): ', np.min(water_sed_col_std))
 
 # Print max Colville sediment conc
-print('ax Colville Sediment conc (kg/m3): ', np.max(water_sed_col))
+print('ax Colville Sediment conc (kg/m3): ', np.max(water_sed_col_std))
 
 
 # --------------------------------------------------------------------------------
@@ -817,12 +914,12 @@ yticks21 = ax21.yaxis.get_major_ticks()
 # River water discharge
 # shared axis X
 ax22 = plt.subplot(gs3[3], sharex = ax19)
-line9, = ax22.plot(time_data_riv[:-4], water_dis_tot[:-4], color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
+line9, = ax22.plot(time_data_riv[:-4], water_dis_tot_std[:-4], color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
 # Colville
-ax22.plot(time_data_riv[:-4], water_dis_col[:-4], label='$\\bf{Colville}$', linewidth=5, 
+ax22.plot(time_data_riv[:-4], water_dis_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, 
             color='m')
 # Kukpuk 
-ax22.plot(time_data_riv[:-4], water_dis_kup[:-4], label='$\\bf{Kuparuk}$', linewidth=5,
+ax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparuk}$', linewidth=5,
             color='peru')
 plt.setp(ax22.get_xticklabels(), visible=False)
 #ax3.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -834,12 +931,12 @@ yticks22 = ax22.yaxis.get_major_ticks()
 # River sediment discharge
 # shared axis X
 ax23 = plt.subplot(gs3[4], sharex = ax19)
-line10, = ax23.plot(time_data_riv[:-4], water_sed_tot_kgs_2[:-4], color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
+line10, = ax23.plot(time_data_riv[:-4], water_sed_tot_std[:-4], color='deepskyblue', label='$\\bf{Total}$', linewidth=8) #time_data_riv[:40] for July 
 # Colville
-ax23.plot(time_data_riv[:-4], water_sed_col_kgs_2[:-4], label='$\\bf{Colville}$', linewidth=5,
+ax23.plot(time_data_riv[:-4], water_sed_col_std[:-4], label='$\\bf{Colville}$', linewidth=5,
             color='m')
 # Kukpuk 
-ax23.plot(time_data_riv[:-4], water_sed_kup_kgs_2[:-4], label='$\\bf{Kuparuk}$', linewidth=5, 
+ax23.plot(time_data_riv[:-4], water_sed_kup_std[:-4], label='$\\bf{Kuparuk}$', linewidth=5, 
             color='peru')
 plt.setp(ax23.get_xticklabels(), visible=False)
 #ax4.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -1041,12 +1138,12 @@ yticks21 = ax21.yaxis.get_major_ticks()
 # River water discharge
 # shared axis X
 ax22 = plt.subplot(gs3[3], sharex = ax19)
-line9, = ax22.plot(time_data_riv[:-4], water_dis_tot[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
+line9, = ax22.plot(time_data_riv[:-4], water_dis_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
 # Colville
-ax22.plot(time_data_riv[:-4], water_dis_col[:-4], label='$\\bf{Colville}$', linewidth=5, 
+ax22.plot(time_data_riv[:-4], water_dis_col_std[:-4], label='$\\bf{Colville}$', linewidth=5, 
             color='#5EF38C')
 # Kukpuk 
-ax22.plot(time_data_riv[:-4], water_dis_kup[:-4], label='$\\bf{Kuparik}$', linewidth=5,
+ax22.plot(time_data_riv[:-4], water_dis_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5,
             color='#F43ECF')
 plt.setp(ax22.get_xticklabels(), visible=False)
 #ax3.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -1058,12 +1155,12 @@ yticks22 = ax22.yaxis.get_major_ticks()
 # River sediment discharge
 # shared axis X
 ax23 = plt.subplot(gs3[4], sharex = ax19)
-line10, = ax23.plot(time_data_riv[:-4], water_sed_tot_kgs_2[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
+line10, = ax23.plot(time_data_riv[:-4], water_sed_tot_std[:-4], color='black', label='$\\bf{Total}$', linewidth=5) #time_data_riv[:40] for July 
 # Colville
-ax23.plot(time_data_riv[:-4], water_sed_col_kgs_2[:-4], label='$\\bf{Colville}$', linewidth=5,
+ax23.plot(time_data_riv[:-4], water_sed_col_std[:-4], label='$\\bf{Colville}$', linewidth=5,
             color='#5EF38C')
 # Kukpuk 
-ax23.plot(time_data_riv[:-4], water_sed_kup_kgs_2[:-4], label='$\\bf{Kuparik}$', linewidth=5, 
+ax23.plot(time_data_riv[:-4], water_sed_kup_std[:-4], label='$\\bf{Kuparik}$', linewidth=5, 
             color='#F43ECF')
 plt.setp(ax23.get_xticklabels(), visible=False)
 #ax4.axhline(y=0.0, color='k', linestyle='--', linewidth=5)
@@ -1482,6 +1579,9 @@ ax24 = plt.subplot(gs3[3], sharex=ax19)
 ax24.plot(time_data_ice[:-4], mean_cover_masked[:-4], color='green', label='$\\bf{Sea Ice Concentration}$', linewidth=8)
 ax24.set_ylabel('Sea Ice \nConc. \n(fraction \nof grid cell)', fontsize=40, fontweight='bold', rotation='horizontal', labelpad=140, va='center')
 plt.setp(ax24.get_xticklabels(), visible=False)
+# Add line for 15% concentration
+ax24.axhline(y=0.15, color='dimgray', linestyle='--', linewidth=2)
+fig15.text(0.132, 0.520, '0.15', color='dimgray', fontsize=25)
 
 # ----------------------
 # Water discharge (Broken Axis)
