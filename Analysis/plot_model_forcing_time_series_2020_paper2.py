@@ -267,36 +267,6 @@ water_dis_hul_double, water_sed_hul_double, water_ssc_hul_double = get_river_dis
 water_dis_jag_double, water_sed_jag_double, water_ssc_jag_double = get_river_dis_sed(river_frc_double, 16, 'double')
 
 
-
-
-
-
-# =============================================================================
-# water_dis_tot = river_frc.river_transport.sum(dim='river')
-# water_dis_col = river_frc.river_transport[:,1:7].sum(dim='river')
-# #water_dis_kuk = river_frc.river_transport[:,12].values
-# water_dis_kup = river_frc.river_transport[:,12].values + river_frc.river_transport[:,13].values
-# # Add together all of the sediment classes
-# riv_all_ssc = river_frc.river_mud_01 + river_frc.river_mud_02 + river_frc.river_sand_01 + river_frc.river_sand_02 + river_frc.river_sand_03
-# water_sed_tot = riv_all_ssc.sum(dim='river')
-# water_sed_col = riv_all_ssc[:,1:7].sum(dim='river')
-# #water_sed_kuk = riv_all_ssc[:,12]
-# water_sed_kup = riv_all_ssc[:,12] + riv_all_ssc[:,13]
-# # Mulitply this by the water discharge to get river sediment discharge 
-# water_sed_tot_kgs = water_sed_tot*water_dis_tot
-# water_sed_col_kgs = water_sed_col*water_dis_col
-# #water_sed_kuk_kgs = water_sed_kuk*water_dis_kuk
-# water_sed_kup_kgs = water_sed_kup*water_dis_kup
-# # Take 2 for river sediment load 
-# # I think this one below is more correct so use this instead for plots 
-# water_sed_tot_kgs_2 = (river_frc.river_transport*riv_all_ssc).sum(dim='river')
-# water_sed_col_kgs_2 = (river_frc.river_transport[:,1:7]*riv_all_ssc[:,1:7]).sum(dim='river')
-# #water_sed_kuk_kgs_2 = (river_frc.river_transport[:,12]*riv_all_ssc[:,12])
-# water_sed_kup_kgs_2 = ((river_frc.river_transport[:,12]+river_frc.river_transport[:,13])*(riv_all_ssc[:,12]+riv_all_ssc[:,13]))
-# 
-# =============================================================================
-
-
 # Pre-process - take spatial averaged of sea ice
 # Find the max, min, median
 mean_cover = ice_data.sea_ice_concentration.mean(dim=('eta_rho', 'xi_rho'))
