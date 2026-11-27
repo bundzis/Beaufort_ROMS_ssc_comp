@@ -237,37 +237,37 @@ dz_full_agg = abs(model_output_agg.z_w[:,:-1,:,:].values - model_output_agg.z_w[
 # Time series of mass in bed and Time series of mass in water column 
 # Do all the other rivers, too
 print('Starting unag calculations', flush=True)
-# # -- Unaggregated --
-# # Kalikpik
-# kal_tot_sed_seabed_unag_full = (model_output_unag.mudmass_15[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# kal_tot_sed_water_unag_full = (model_output_unag.mud_15[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Colville
-# col_tot_sed_seabed_unag_full = (model_output_unag.mudmass_16[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# col_tot_sed_water_unag_full = (model_output_unag.mud_16[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Sagavanirktok
-# sag_tot_sed_seabed_unag_full = (model_output_unag.mudmass_17[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# sag_tot_sed_water_unag_full = (model_output_unag.mud_17[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Fish Creek
-# fis_tot_sed_seabed_unag_full = (model_output_unag.mudmass_18[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# fis_tot_sed_water_unag_full = (model_output_unag.mud_18[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Kuparuk
-# kup_tot_sed_seabed_unag_full = (model_output_unag.mudmass_19[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# kup_tot_sed_water_unag_full = (model_output_unag.mud_19[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Staines
-# sta_tot_sed_seabed_unag_full = (model_output_unag.mudmass_20[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# sta_tot_sed_water_unag_full = (model_output_unag.mud_20[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Canning 
-# can_tot_sed_seabed_unag_full = (model_output_unag.mudmass_21[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# can_tot_sed_water_unag_full = (model_output_unag.mud_21[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Katakturuk
-# kat_tot_sed_seabed_unag_full = (model_output_unag.mudmass_22[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# kat_tot_sed_water_unag_full = (model_output_unag.mud_22[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Hulahula
-# hul_tot_sed_seabed_unag_full = (model_output_unag.mudmass_23[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# hul_tot_sed_water_unag_full = (model_output_unag.mud_23[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
-# # Jago
-# jag_tot_sed_seabed_unag_full = (model_output_unag.mudmass_24[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
-# jag_tot_sed_water_unag_full = (model_output_unag.mud_24[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# -- Unaggregated --
+# Kalikpik
+kal_tot_sed_seabed_unag_full = (model_output_unag.mudmass_15[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+kal_tot_sed_water_unag_full = (model_output_unag.mud_15[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Colville
+col_tot_sed_seabed_unag_full = (model_output_unag.mudmass_16[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+col_tot_sed_water_unag_full = (model_output_unag.mud_16[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Sagavanirktok
+sag_tot_sed_seabed_unag_full = (model_output_unag.mudmass_17[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+sag_tot_sed_water_unag_full = (model_output_unag.mud_17[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Fish Creek
+fis_tot_sed_seabed_unag_full = (model_output_unag.mudmass_18[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+fis_tot_sed_water_unag_full = (model_output_unag.mud_18[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Kuparuk
+kup_tot_sed_seabed_unag_full = (model_output_unag.mudmass_19[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+kup_tot_sed_water_unag_full = (model_output_unag.mud_19[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Staines
+sta_tot_sed_seabed_unag_full = (model_output_unag.mudmass_20[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+sta_tot_sed_water_unag_full = (model_output_unag.mud_20[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Canning 
+can_tot_sed_seabed_unag_full = (model_output_unag.mudmass_21[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+can_tot_sed_water_unag_full = (model_output_unag.mud_21[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Katakturuk
+kat_tot_sed_seabed_unag_full = (model_output_unag.mudmass_22[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+kat_tot_sed_water_unag_full = (model_output_unag.mud_22[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Hulahula
+hul_tot_sed_seabed_unag_full = (model_output_unag.mudmass_23[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+hul_tot_sed_water_unag_full = (model_output_unag.mud_23[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
+# Jago
+jag_tot_sed_seabed_unag_full = (model_output_unag.mudmass_24[:,:,:,:]*dx*dy).sum(dim=['Nbed', 'eta_rho', 'xi_rho']).compute()
+jag_tot_sed_water_unag_full = (model_output_unag.mud_24[:,:,:,:]*dx*dy*dz_full_unag).sum(dim=['s_rho', 'eta_rho', 'xi_rho']).compute()
 
 print('Starting agg calculations', flush=True)
 # -- Aggregated --
@@ -325,34 +325,34 @@ jag_tot_sed_water_agg_full = (model_output_agg.mud_24[:,:,:,:]*dx*dy*dz_full_agg
 print('Saving data', flush=True)
 # --------- Save the Data ----------
 # Unaggregated
-# # Make an xarray dataset to save the data to 
-# river_sed_data_by_river_unag = xr.Dataset(
-#     data_vars=dict(
-#         kal_tot_sed_seabed_unag_full=(['ocean_time'], kal_tot_sed_seabed_unag_full.values),
-#         kal_tot_sed_water_unag_full=(['ocean_time'], kal_tot_sed_water_unag_full.values),
-#         col_tot_sed_seabed_unag_full=(['ocean_time'], col_tot_sed_seabed_unag_full.values),
-#         col_tot_sed_water_unag_full=(['ocean_time'], col_tot_sed_water_unag_full.values),
-#         sag_tot_sed_seabed_unag_full=(['ocean_time'], sag_tot_sed_seabed_unag_full.values),
-#         sag_tot_sed_water_unag_full=(['ocean_time'], sag_tot_sed_water_unag_full.values),
-#         fis_tot_sed_seabed_unag_full=(['ocean_time'], fis_tot_sed_seabed_unag_full.values),
-#         fis_tot_sed_water_unag_full=(['ocean_time'], fis_tot_sed_water_unag_full.values),
-#         kup_tot_sed_seabed_unag_full=(['ocean_time'], kup_tot_sed_seabed_unag_full.values),
-#         kup_tot_sed_water_unag_full=(['ocean_time'], kup_tot_sed_water_unag_full.values),
-#         sta_tot_sed_seabed_unag_full=(['ocean_time'], sta_tot_sed_seabed_unag_full.values),
-#         sta_tot_sed_water_unag_full=(['ocean_time'], sta_tot_sed_water_unag_full.values),
-#         can_tot_sed_seabed_unag_full=(['ocean_time'], can_tot_sed_seabed_unag_full.values),
-#         can_tot_sed_water_unag_full=(['ocean_time'], can_tot_sed_water_unag_full.values),
-#         kat_tot_sed_seabed_unag_full=(['ocean_time'], kat_tot_sed_seabed_unag_full.values),
-#         kat_tot_sed_water_unag_full=(['ocean_time'], kat_tot_sed_water_unag_full.values),
-#         hul_tot_sed_seabed_unag_full=(['ocean_time'], hul_tot_sed_seabed_unag_full.values),
-#         hul_tot_sed_water_unag_full=(['ocean_time'], hul_tot_sed_water_unag_full.values),
-#         jag_tot_sed_seabed_unag_full=(['ocean_time'], jag_tot_sed_seabed_unag_full.values),
-#         jag_tot_sed_water_unag_full=(['ocean_time'], jag_tot_sed_water_unag_full.values)
-#         ),
-#     coords=dict(
-#         ocean_time=('ocean_time', model_output_unag.ocean_time.values)
-#         ),
-#     attrs=dict(description='Time series of riverine unaggregated muds in the water column and seabed from Unique Unaggregated Simulation'))
+# Make an xarray dataset to save the data to 
+river_sed_data_by_river_unag = xr.Dataset(
+    data_vars=dict(
+        kal_tot_sed_seabed_unag_full=(['ocean_time'], kal_tot_sed_seabed_unag_full.values),
+        kal_tot_sed_water_unag_full=(['ocean_time'], kal_tot_sed_water_unag_full.values),
+        col_tot_sed_seabed_unag_full=(['ocean_time'], col_tot_sed_seabed_unag_full.values),
+        col_tot_sed_water_unag_full=(['ocean_time'], col_tot_sed_water_unag_full.values),
+        sag_tot_sed_seabed_unag_full=(['ocean_time'], sag_tot_sed_seabed_unag_full.values),
+        sag_tot_sed_water_unag_full=(['ocean_time'], sag_tot_sed_water_unag_full.values),
+        fis_tot_sed_seabed_unag_full=(['ocean_time'], fis_tot_sed_seabed_unag_full.values),
+        fis_tot_sed_water_unag_full=(['ocean_time'], fis_tot_sed_water_unag_full.values),
+        kup_tot_sed_seabed_unag_full=(['ocean_time'], kup_tot_sed_seabed_unag_full.values),
+        kup_tot_sed_water_unag_full=(['ocean_time'], kup_tot_sed_water_unag_full.values),
+        sta_tot_sed_seabed_unag_full=(['ocean_time'], sta_tot_sed_seabed_unag_full.values),
+        sta_tot_sed_water_unag_full=(['ocean_time'], sta_tot_sed_water_unag_full.values),
+        can_tot_sed_seabed_unag_full=(['ocean_time'], can_tot_sed_seabed_unag_full.values),
+        can_tot_sed_water_unag_full=(['ocean_time'], can_tot_sed_water_unag_full.values),
+        kat_tot_sed_seabed_unag_full=(['ocean_time'], kat_tot_sed_seabed_unag_full.values),
+        kat_tot_sed_water_unag_full=(['ocean_time'], kat_tot_sed_water_unag_full.values),
+        hul_tot_sed_seabed_unag_full=(['ocean_time'], hul_tot_sed_seabed_unag_full.values),
+        hul_tot_sed_water_unag_full=(['ocean_time'], hul_tot_sed_water_unag_full.values),
+        jag_tot_sed_seabed_unag_full=(['ocean_time'], jag_tot_sed_seabed_unag_full.values),
+        jag_tot_sed_water_unag_full=(['ocean_time'], jag_tot_sed_water_unag_full.values)
+        ),
+    coords=dict(
+        ocean_time=('ocean_time', model_output_unag.ocean_time.values)
+        ),
+    attrs=dict(description='Time series of riverine unaggregated muds in the water column and seabed from Unique Unaggregated Simulation'))
 
 # Save this to a netcdf
 #river_sed_data_by_river_unag.to_netcdf('/projects/brun1463/ROMS/river_sed_seabed_water_timeseries_unag.nc')
@@ -388,5 +388,5 @@ river_sed_data_by_river_agg = xr.Dataset(
     attrs=dict(description='Time series of riverine aggregated muds in the water column and seabed from Unique Aggregated Simulation'))
 
 # Save this to a netcdf
-river_sed_data_by_river_agg.to_netcdf('/projects/brun1463/ROMS/river_sed_seabed_water_timeseries_agg.nc')
+#river_sed_data_by_river_agg.to_netcdf('/projects/brun1463/ROMS/river_sed_seabed_water_timeseries_agg.nc')
 
