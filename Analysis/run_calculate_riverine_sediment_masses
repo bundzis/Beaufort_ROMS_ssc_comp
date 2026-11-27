@@ -1,0 +1,14 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=20
+#SBATCH --time=10:00:00
+#SBATCH --qos=cpu-normal
+#SBATCH --partition=acpu
+#SBATCH --job-name=calculate_riverine_sediment_masses
+#SBATCH --output=calculate_riverine_sediment_masses_001.out
+
+module purge
+module load anaconda
+conda activate xroms
+
+python3 calculate_riverine_sediment_masses.py
